@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from frontmodules.views import IngredientListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('ilist',IngredientListView.as_view()),
 ]
