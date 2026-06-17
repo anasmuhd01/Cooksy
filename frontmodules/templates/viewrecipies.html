@@ -13,7 +13,12 @@
 </head>
 
 <body>
-    <h1>all recipies</h1>
+    <h1>selected recipies</h1>
+    <ul>
+        {% for i in selecteditems %}
+        <li>{{i}}</li><span>{{i.id}}</span>
+        {% endfor %}
+    </ul>
 </body>
 
 </html>

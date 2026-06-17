@@ -7,6 +7,7 @@ class Recipie(models.Model):
     description = models.TextField()
     # recipie_img = models.ImageField(upload_to='recicipie_images',null=True)
 
+    # dunder method
     def __str__(self):
         return self.recipie_name
 
@@ -14,6 +15,7 @@ class Ingredient(models.Model):
     ingredient_name = models.CharField(max_length=100)
     price = models.PositiveIntegerField()
 
+    # dunder method which called when python neeeds a string to be represented
     def __str__(self):
         return self.ingredient_name
 
@@ -22,5 +24,6 @@ class ReciepieItem(models.Model):
     ingredient = models.ForeignKey(Ingredient,on_delete=models.CASCADE)
     quantity = models.CharField(max_length=100)
 
+    # dunder method
     def __str__(self):
         return f"{self.recipie.recipie_name}-{self.ingredient.ingredient_name}"
