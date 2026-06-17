@@ -10,6 +10,13 @@ class IngredientListView(View):
     def get(self,req):
         ingredients = Ingredient.objects.all()
         return render(req,'ingredientlist.html',{'ingredients':ingredients})
+    def post(self,req):
+        data = req.POST.get('selected-ingredients')
+        print(data)
+        return render(req,'viewrecipies.html',{'data':data})
+    
+
+    
     
 
 def live_search(req):
@@ -28,3 +35,9 @@ def live_search(req):
     )
 
     return JsonResponse(data,safe=False)
+
+
+class ViewRecipies(View):
+
+    def get(self,req):
+        return render(req,'viewrecipies.html')

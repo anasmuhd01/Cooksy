@@ -21,7 +21,8 @@
         <div class="row ">
             {% for i in ingredients %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                <button class="btn btn-info w-100 mb-2" href="" style="color:black;">
+                <button class="ingredient-button btn btn-info w-100 mb-2" data-id="{{i.id}}"
+                    data-name="{{i.ingredient_name}}" style="color:black;">
                     {{ i.ingredient_name }}
                 </button>
             </div>
@@ -31,9 +32,18 @@
 
     <div id="selected"></div>
 
+    <form method="post" action="{% url 'ilist' %}" id="recipie-form">
+        {% csrf_token %}
+        <input type="hidden" id="selected-ingredients" name="selected-ingredients">
+        <button type="submit">Find Recipies</button>
+    </form>
+
     <script>
+
         const searchBox = document.getElementById("search-box")
         const results = document.getElementById("results")
+
+
 
         searchBox.addEventListener("keyup", function () {
             let query = this.value;
@@ -53,9 +63,10 @@
     </script>
 
     <script>
+
         let selectedIngredients = [];
         function selectedIngredient(id, name) {
-            // console.log(name)
+            console.log(selectedIngredients)
             if (!selectedIngredients.includes(id)) {
                 selectedIngredients.push(id);
                 document.getElementById("selected").innerHTML += `
@@ -72,6 +83,23 @@
             document.getElementById(`ingredient-${id}`).remove()
         }
 
+
+        const ingredientButtons = document.querySelectorAll(".ingredient-button");
+
+        ingredientButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                console.log(this.dataset.name)
+                const id = Number(this.dataset.id);
+                const name = this.dataset.name;
+                selectedIngredient(id, name);
+
+            });
+        });
+
+        const form = document.getElementById("recipie-form")
+        form.addEventListener("submit", function () {
+            document.getElementById('selected-ingredients').value = selectedIngredients;
+        })
 
     </script>
 
