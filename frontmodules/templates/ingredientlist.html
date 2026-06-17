@@ -2,6 +2,7 @@
 <html lang="en" data-bs-theme="light">
 
 <head>
+
     <title>Title</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
@@ -13,17 +14,68 @@
 </head>
 
 <body>
+    <input type="text" name="" id="search-box" placeholder="search product">
+    <div id="results"></div>
 
-    {% for i in ingredients %}
-    <div class="d-flex flex-col">
-        <div>
-            <a class="btn btn-info text-color-black" href="" style="color: black;"> {{i.ingredient_name}}</a>
-
+    <div class="container mt-5">
+        <div class="row ">
+            {% for i in ingredients %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <button class="btn btn-info w-100 mb-2" href="" style="color:black;">
+                    {{ i.ingredient_name }}
+                </button>
+            </div>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
+
+    <div id="selected"></div>
+
+    <script>
+        const searchBox = document.getElementById("search-box")
+        const results = document.getElementById("results")
+
+        searchBox.addEventListener("keyup", function () {
+            let query = this.value;
+            fetch(`/search/?q=${query}`)
+                .then(res => res.json())
+                .then(data => {
+                    results.innerHTML = "";
+                    data.forEach(item => {
+                        results.innerHTML += `
+                        <button onclick="selectedIngredient(${item.id},'${item.ingredient_name}')">
+                            ${item.ingredient_name}</button>
+                        `;
+                    })
+                })
+        })
+
+    </script>
+
+    <script>
+        let selectedIngredients = [];
+        function selectedIngredient(id, name) {
+            // console.log(name)
+            if (!selectedIngredients.includes(id)) {
+                selectedIngredients.push(id);
+                document.getElementById("selected").innerHTML += `
+                <span id="ingredient-${id}" class="badge bg-success p-3 fs-3">
+                    ${name}
+                    <button onclick="removeIngredient(${id})">❌</button>
+                    </span>
+                `
+            }
+        }
+
+        function removeIngredient(id) {
+            selectedIngredients = selectedIngredients.filter(item => item !== id);
+            document.getElementById(`ingredient-${id}`).remove()
+        }
+
+
+    </script>
 
 
 </body>
 
-</html>
+</html

@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from frontmodules.views import IngredientListView
+from frontmodules.views import IngredientListView,live_search
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ilist',IngredientListView.as_view()),
+    path('search/',live_search,name="ingredient-search")
 ]
