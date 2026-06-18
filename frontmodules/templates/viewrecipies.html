@@ -13,12 +13,22 @@
 </head>
 
 <body>
-    <h1>selected recipies</h1>
-    <ul>
-        {% for i in selecteditems %}
-        <li>{{i}}</li><span>{{i.id}}</span>
-        {% endfor %}
-    </ul>
+
+    <h2>founded recipies</h2>
+    {% for i in recipies %}
+    <div class="d-flex ">
+        <div class="border shadow black w-25 align-items-center justify-content-center"
+            style="width: 50 px text-center">
+            <h3>{{i.recipie_name}}</h3>
+            <p>{{i.description}}</p>
+            <a href="#" class="btn btn-primary m-3">make it</a>
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+
 </body>
 
 </html>
