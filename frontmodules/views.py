@@ -15,7 +15,7 @@ class IngredientListView(View):
     def post(self,req):
         ingredients = Ingredient.objects.all()
 
-        print("id of the ingredient is :",req.POST.get('selected-ingredients'))
+        #print("id of the ingredient is :",req.POST.get('selected-ingredients'))
 
         data = req.POST.get('selected-ingredients')
 
@@ -80,14 +80,20 @@ class BuyRecipieView(View):
     
     def get(self,req,**kwargs):
         selected = req.session.get('user_selected_items')
+        
 
         user_selected_ingredients = Ingredient.objects.filter(id__in = selected)
        
         ingredients = ReciepieItem.objects.filter(recipie__id = kwargs.get('id'))
+
         #takes the first item of the model with first then use what item
         recipie_name = ingredients.first().recipie
         # print(ingredients)
-        # for i in ingredients:
-        #     print(i.ingredient)
+        
+        """
+the all ingredient id of the recipie are in this i.ingredient.id so using req.session this can be passed and used
+        """
+        for i in ingredients:
+            print(i.ingredient.id)
         # {'recipieitem':recipieitem}
         return render(req,'buyrecipie.html',{'ingredients':ingredients,'user_selected':user_selected_ingredients,'recipie_name':recipie_name})
