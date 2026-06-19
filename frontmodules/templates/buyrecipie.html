@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS v5.3.8 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div>
+        <h1>How To make {{recipie_name}}</h1>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam quasi dolore magnam. Corrupti repudiandae
+            fugiat quod corporis, hic, odio harum minus in temporibus iste accusantium veritatis tenetur, id at
+            voluptatum?Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta odio ullam ab tenetur est optio
+            numquam exercitationem voluptatibus nam voluptate, sunt et, reiciendis, molestias aliquid eaque pariatur
+            placeat deserunt animi!Lorem Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis doloremque
+            aliquid rerum, quasi qui commodi pariatur, libero ipsam magni deleniti debitis ab optio possimus alias
+            suscipit illum, atque facere ipsum?</p>
+    </div>
+    <div>
+
+        <h1>Buy all ingredients for - {{recipie_name}}</h1>
+
+        {% for item in ingredients %}
+
+        <h3>{{item.ingredient}}</h3>
+        <p>quantity - {{item.quantity}} g</p>
+        {% endfor %}
+
+    </div>
+
+    <p>---------------------------------</p><br>
+    <p>---------------------------------</p>
+    <div>
+        <h3>Buy only selected </h3>
+        {% for i in user_selected %}
+        <h3>{{i.ingredient_name}}</h3>
+        {% endfor %}
+    </div>
+
+
+
+
+</body>
+
+</html>

@@ -15,14 +15,15 @@ class IngredientListView(View):
     def post(self,req):
         ingredients = Ingredient.objects.all()
 
-    
+        print("id of the ingredient is :",req.POST.get('selected-ingredients'))
+
         data = req.POST.get('selected-ingredients')
+
         splited_data = data.split(',')
 
-        
         # to passs the values as iterable use the below method 
         # using field lookups
-        selected_items = Ingredient.objects.filter(id__in=splited_data)
+        
         recipies = ReciepieItem.objects.filter(ingredient__id__in = splited_data)
         match_count = {}
         
@@ -47,8 +48,9 @@ class IngredientListView(View):
             recipie_item = Recipie.objects.get(id=recipie_id)
             # print(recipie_item.recipie_name)
             matches.append(recipie_item)
+        req.session['user_selected_items']=splited_data
         
-        return render(req,'ingredientlist.html',{'recipies':matches,'ingredients':ingredients})
+        return render(req,'ingredientlist.html',{'recipies':matches,'ingredients':ingredients,'user_input':splited_data})
     
 
 def live_search(req):
@@ -73,3 +75,19 @@ class ViewRecipies(View):
 
     def get(self,req):
         return render(req,'viewrecipies.html')
+    
+class BuyRecipieView(View):
+    
+    def get(self,req,**kwargs):
+        selected = req.session.get('user_selected_items')
+
+        user_selected_ingredients = Ingredient.objects.filter(id__in = selected)
+       
+        ingredients = ReciepieItem.objects.filter(recipie__id = kwargs.get('id'))
+        #takes the first item of the model with first then use what item
+        recipie_name = ingredients.first().recipie
+        # print(ingredients)
+        # for i in ingredients:
+        #     print(i.ingredient)
+        # {'recipieitem':recipieitem}
+        return render(req,'buyrecipie.html',{'ingredients':ingredients,'user_selected':user_selected_ingredients,'recipie_name':recipie_name})

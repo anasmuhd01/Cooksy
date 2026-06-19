@@ -64,7 +64,10 @@ Field 'id' expected a number but got ''.
             style="width: 50 px text-center">
             <h3>{{i.recipie_name}}</h3>
             <p>{{i.description}}</p>
-            <a href="#" class="btn btn-primary m-3">make it</a>
+            <a href="{% url 'buyrecipie' i.id %}" class="btn btn-primary m-3">make it</a>
+            {% for i in user_input %}
+            <h4>userinputed ids :{{i}}</h4>
+            {% endfor %}
         </div>
 
     </div>
