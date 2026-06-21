@@ -2,55 +2,60 @@ from django.shortcuts import render,redirect
 from frontmodules.models import *
 from django.views import View
 from django.http import JsonResponse
-
+from django.contrib import messages
+from django.urls import reverse
 
 # Create your views here.
+
+class HomepageView(View):
+    def get(self,req):
+        return render(req,'homepage.html')
 
 class IngredientListView(View):
 
     def get(self,req):
+
         ingredients = Ingredient.objects.all()
-        return render(req,'ingredientlist.html',{'ingredients':ingredients})
-    
-    def post(self,req):
-        ingredients = Ingredient.objects.all()
-
-        #print("id of the ingredient is :",req.POST.get('selected-ingredients'))
-
-        data = req.POST.get('selected-ingredients')
-
-        splited_data = data.split(',')
-
-        # to passs the values as iterable use the below method 
-        # using field lookups
+        data = req.GET.get('ingredients','')
         
-        recipies = ReciepieItem.objects.filter(ingredient__id__in = splited_data)
-        match_count = {}
+        if not data:
+            return render(req,'ingredientlist.html',{
+                'ingredients':ingredients,'recipies':[],'user_input':[]
+            })
         
-        for i in recipies:
-            recipie_id = i.recipie.id
+        splitted_data = [i for i in data.split(',') if i]
+        
+        req.session['user_selected_items']=splitted_data
+
+        recipies = ReciepieItem.objects.filter(ingredient_id__in = splitted_data)
+
+        match_count ={}
+        for item in recipies:
+            recipie_id = item.recipie.id
             if recipie_id in match_count:
                 match_count[recipie_id] += 1
             else:
                 match_count[recipie_id] = 1
-
-        """
-        -python sort by first item in each tuple which is RECIPIE_ID we need to sort by 
-        MATCH_COUNT so key = lambda x:x[1]
-        -without reverse = True smallest count first so to make it correct order
-        eg: (4, 1), (3, 3)]
-        with reverse = True
-        eg: [(3, 3), (4, 1)]
-        """
+        
         matches = []
-        matched_recipies_count = (sorted(match_count.items(),key=lambda x:x[1],reverse=True))
+        matched_recipies_count = sorted(match_count.items(),key=lambda x:x[1],reverse=True)
         for recipie_id, match in matched_recipies_count:
             recipie_item = Recipie.objects.get(id=recipie_id)
-            # print(recipie_item.recipie_name)
             matches.append(recipie_item)
-        req.session['user_selected_items']=splited_data
+      
+        return render(req,'ingredientlist.html',{'ingredients':ingredients,'recipies':matches,'user_input':splitted_data})
+ 
+    def post(self,req):
+        data = req.POST.get('selected-ingredients','').strip()
+        if not data:
+            messages.error(req,'please select any ingredients')
+            return redirect('ilist')
         
-        return render(req,'ingredientlist.html',{'recipies':matches,'ingredients':ingredients,'user_input':splited_data})
+        splitted_data = [i for i in data.split(',') if i]
+        return redirect(
+            f"{reverse('ilist')}?ingredients={','.join(splitted_data)}"
+        )
+
     
 
 def live_search(req):

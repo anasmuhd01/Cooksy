@@ -52,9 +52,7 @@ Field 'id' expected a number but got ''.
     <form method="post" action="{% url 'ilist' %}" id="recipie-form">
         {% csrf_token %}
         <input type="hidden" id="selected-ingredients" name="selected-ingredients">
-        <button type="submit">Find Recipies</button><span>
-            <h3 style="color: red;">!!!!!problem with this button</h3>
-        </span>
+        <button type="submit">Find Recipies</button>
     </form>
     {% if recipies %}
     <h2>founded recipies</h2>
@@ -74,7 +72,9 @@ Field 'id' expected a number but got ''.
 
     {% endfor %}
     {% else %}
-    <h2>No recipies found ! Add ingredients to find</h2>
+    {% for msg in messages %}
+    <h2>{{msg}}</h2>
+    {% endfor %}
     {% endif %}
 
     <script>
@@ -137,6 +137,12 @@ Field 'id' expected a number but got ''.
 
         const form = document.getElementById("recipie-form")
         form.addEventListener("submit", function () {
+            if (!selectedIngredients || selectedIngredients.length === 0) {
+                e.preventDefault();
+                alert("Please select at least one ingredient");
+                return;
+            }
+
             document.getElementById('selected-ingredients').value = selectedIngredients;
         })
 
