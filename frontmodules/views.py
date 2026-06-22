@@ -93,7 +93,8 @@ class BuyRecipieView(View):
         ingredients = ReciepieItem.objects.filter(recipie__id = kwargs.get('id'))
 
         #takes the first item of the model with first then use what item
-        recipie_name = ingredients.first().recipie
+        first_item = ingredients.first()
+        recipie_name = first_item.recipie if first_item else None
         # print(ingredients)
         
         """
@@ -101,7 +102,26 @@ the all ingredient id of the recipie are in this i.ingredient.id so using req.se
         """
         print(req.session.get("user selected:",selected))
         print("all ingredients ids")
-        for i in ingredients:
-            print(i.ingredient.id)
-        # {'recipieitem':recipieitem}
+
+        all_ingredients_id = list(
+            ingredients.values_list('ingredient_id',flat=True)
+        )
+        req.session['all_ingredients'] = all_ingredients_id
+       
         return render(req,'buyrecipie.html',{'ingredients':ingredients,'user_selected':user_selected_ingredients,'recipie_name':recipie_name})
+    
+class BuyallFormView(View):
+    def get(self,req):
+
+        all_ingredients = req.session.get('all_ingredients',[])
+        print('all ingredient',all_ingredients)
+        selected = Ingredient.objects.filter(id__in = all_ingredients)
+        
+        return render(req,'buyallform.html',{'all_ingredients':selected})
+    
+class BuyselectedView(View):
+    def get(self,req):
+        selected = req.session.get('user_selected_items')
+        
+        ingredients = Ingredient.objects.filter(id__in = selected)
+        return render(req,'buyselectedform.html',{'selected_ingredients':ingredients})

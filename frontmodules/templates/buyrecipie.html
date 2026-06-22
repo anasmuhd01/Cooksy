@@ -34,8 +34,9 @@
 
         <h3>{{item.ingredient}}</h3>
         <p>quantity - {{item.quantity}} g</p>
+        <p>Price - {{item.ingredient.price}}</p>
         {% endfor %}
-        <a href="" class="btn btn-primary">Buy All</a>
+        <a href="{% url 'buy-all' %}" class="btn btn-primary">Buy All</a>
 
 
     </div>
@@ -47,7 +48,7 @@
         {% for i in user_selected %}
         <h3>{{i.ingredient_name}}</h3>
         {% endfor %}
-        <a href="" class="btn btn-primary">Buy Selected Items</a>
+        <a href="{% url 'buy-selected' %}" class="btn btn-primary">Buy Selected Items</a>
     </div>
 
 
