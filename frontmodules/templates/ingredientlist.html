@@ -1,23 +1,11 @@
-<!doctype html>
-<html lang="en" data-bs-theme="light">
-
-<head>
-
-    <title>Title</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Bootstrap CSS v5.3.8 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
-</head>
+{% extends 'base.html' %}
+{% block base %}
 
 <body>
     <!-- <input type="text" name="" id="search-box" placeholder="search product"> -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> -->
 
-    <div class="container mt-5">
+    <!-- <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="search-container">
@@ -28,22 +16,82 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
+    <!-- <h2 class="text-center mb-4 fw-bold">
+        Find Your Ingredients
+    </h2>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="cooksy-search-wrapper">
+                    <i class="fas fa-search cooksy-search-icon"></i>
+    
+                    <input type="text" id="search-box" class="cooksy-search-input" placeholder="Search ingredients...">
+    
+                    <div id="results"></div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <h2 class="text-center mb-4 fw-bold">
+        Find Your Ingredients
+    </h2>
 
     <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+
+                <div class="cooksy-search-wrapper">
+
+                    <i class="fas fa-search cooksy-search-icon"></i>
+
+                    <input type="text" id="search-box" class="cooksy-search-input" placeholder="Search ingredients...">
+
+                    <div id="results"></div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="container mt-5">
         <div class="row ">
             {% for i in ingredients %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                <button class="ingredient-button btn btn-info w-100 mb-2" data-id="{{i.id}}"
+                <button class="ingredient-button btn btn-info w-100 mb-2 m-2" data-id="{{i.id}}"
                     data-name="{{i.ingredient_name}}" style="color:black;">
-                    {{ i.ingredient_name }}
+                    {% if i.image %}
+                    <img src="{{ i.image.url }}" alt="">
+                    {% else %}
+                    {{i.ingredient_name}}
+                    {% endif %}
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div> -->
+    <div class="container mt-5">
+        <div class="row g-3">
+            {% for i in ingredients %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <button class="recipe-ing-card w-100" data-id="{{ i.id }}" data-name="{{ i.ingredient_name }}">
+
+                    {% if i.image %}
+                    <img src="{{ i.image.url }}" alt="{{ i.ingredient_name }}" class="recipe-ing-card__image">
+                    {% endif %}
+
+                    <span class="recipe-ing-card__title">
+                        {{ i.ingredient_name }}
+                    </span>
+
                 </button>
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <div id="selected"></div>
+    <div id="selected" class="m-2"></div> <!-- this div shows the selected ingredients  -->
     <!-- problem with this button when pressed without ingredient
      it shows 
      ValueError at /user/ilist
@@ -52,32 +100,33 @@ Field 'id' expected a number but got ''.
     <form method="post" action="{% url 'ilist' %}" id="recipie-form">
         {% csrf_token %}
         <input type="hidden" id="selected-ingredients" name="selected-ingredients">
-        <button type="submit">Find Recipies</button>
+        <button type="submit" class="find-btn m-5">Find Recipies</button>
     </form>
-    {% if recipies %}
-    <h2>founded recipies</h2>
-    {% for i in recipies %}
-    <div class="d-flex ">
-        <div class="border shadow black w-25 align-items-center justify-content-center"
-            style="width: 50 px text-center">
-            <h3>{{i.recipie_name}}</h3>
-            <p>{{i.description}}</p>
-            <a href="{% url 'buyrecipie' i.id %}" class="btn btn-primary m-3">make it</a>
-            {% for i in user_input %}
-            <h4>userinputed ids :{{i}}</h4>
-            {% endfor %}
+    <div class="recipe-gridd">
+
+        {% if recipies %}
+        <h2>Founded Recipes</h2>
+
+        {% for i in recipies %}
+        <div class="recipe-cardd">
+            <h3>{{ i.recipie_name }}</h3>
+            <p>{{ i.description }}</p>
+
+            <a href="{% url 'buyrecipie' i.id %}" class="btn btn-primary">
+                make it
+            </a>
         </div>
+        {% endfor %}
+
+        {% else %}
+        {% if messages %}
+        <h2>No recipies found , Please select any ingredients</h2>
+        {% endif %}
+        {% endif %}
 
     </div>
 
-    {% endfor %}
-    {% else %}
-    {% for msg in messages %}
-    <h2>{{msg}}</h2>
-    {% endfor %}
-    {% endif %}
-
-    <script>
+    <!-- <script>
 
         const searchBox = document.getElementById("search-box")
         const results = document.getElementById("results")
@@ -99,6 +148,45 @@ Field 'id' expected a number but got ''.
                 })
         })
 
+    </script> -->
+    <script>
+        const searchBox = document.getElementById("search-box");
+        const results = document.getElementById("results");
+
+        searchBox.addEventListener("keyup", function () {
+
+            let query = this.value.trim();
+
+            if (query === "") {
+                results.innerHTML = "";
+                results.style.display = "none";
+                return;
+            }
+
+            fetch(`/search/?q=${query}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    results.innerHTML = "";
+
+                    if (data.length === 0) {
+                        results.style.display = "none";
+                        return;
+                    }
+
+                    results.style.display = "flex";
+
+                    data.forEach(item => {
+                        results.innerHTML += `
+                        <button
+                            class="cooksy-search-result-item"
+                            onclick="selectedIngredient(${item.id}, '${item.ingredient_name}')">
+                            ${item.ingredient_name}
+                        </button>
+                    `;
+                    });
+                });
+        });
     </script>
 
     <script>
@@ -123,7 +211,7 @@ Field 'id' expected a number but got ''.
         }
 
 
-        const ingredientButtons = document.querySelectorAll(".ingredient-button");
+        const ingredientButtons = document.querySelectorAll(".recipe-ing-card");
 
         ingredientButtons.forEach(button => {
             button.addEventListener("click", function () {
@@ -151,4 +239,4 @@ Field 'id' expected a number but got ''.
 
 </body>
 
-</html
+{% endblock base %}

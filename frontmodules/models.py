@@ -14,6 +14,7 @@ class Recipie(models.Model):
 class Ingredient(models.Model):
     ingredient_name = models.CharField(max_length=100)
     price = models.PositiveIntegerField()
+    image = models.ImageField(upload_to='ingredient_image',null=True)
 
     # dunder method which called when python neeeds a string to be represented
     def __str__(self):

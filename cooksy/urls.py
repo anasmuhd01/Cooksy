@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from frontmodules.views import IngredientListView,live_search,HomepageView
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',HomepageView.as_view(),name='home'),
     path('search/',live_search,name="ingredient-search"),
     path('user/',include('frontmodules.urls'))
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

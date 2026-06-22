@@ -42,13 +42,14 @@ class IngredientListView(View):
         for recipie_id, match in matched_recipies_count:
             recipie_item = Recipie.objects.get(id=recipie_id)
             matches.append(recipie_item)
-      
+
+        messages.error(req,"Please Select Atleast One Ingredient")
         return render(req,'ingredientlist.html',{'ingredients':ingredients,'recipies':matches,'user_input':splitted_data})
  
     def post(self,req):
         data = req.POST.get('selected-ingredients','').strip()
         if not data:
-            messages.error(req,'please select any ingredients')
+            messages.error(req,'please select atleast one ingredients')
             return redirect('ilist')
         
         splitted_data = [i for i in data.split(',') if i]
@@ -98,6 +99,8 @@ class BuyRecipieView(View):
         """
 the all ingredient id of the recipie are in this i.ingredient.id so using req.session this can be passed and used
         """
+        print(req.session.get("user selected:",selected))
+        print("all ingredients ids")
         for i in ingredients:
             print(i.ingredient.id)
         # {'recipieitem':recipieitem}
