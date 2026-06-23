@@ -4,8 +4,15 @@ from django.views import View
 from django.http import JsonResponse
 from django.contrib import messages
 from django.urls import reverse
-
+import razorpay
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
 # Create your views here.
+
+
+RAZORPAY_KEY = "rzp_test_SxQtLPRLPQ08jd"
+RAZORPAY_SECRET_KEY = "9Xk2z1fJQVK7X4MyVVxQVXO1"
 
 class HomepageView(View):
     def get(self,req):
@@ -109,15 +116,51 @@ the all ingredient id of the recipie are in this i.ingredient.id so using req.se
         req.session['all_ingredients'] = all_ingredients_id
        
         return render(req,'buyrecipie.html',{'ingredients':ingredients,'user_selected':user_selected_ingredients,'recipie_name':recipie_name})
-    
+
+@method_decorator(never_cache,name='dispatch')   
 class BuyallFormView(View):
     def get(self,req):
+        
 
         all_ingredients = req.session.get('all_ingredients',[])
-        print('all ingredient',all_ingredients)
+        # print('all ingredient',all_ingredients)
+        qs = Ingredient.objects.filter(id__in = all_ingredients)
         selected = Ingredient.objects.filter(id__in = all_ingredients)
         
-        return render(req,'buyallform.html',{'all_ingredients':selected})
+        client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET_KEY))
+
+        data = { "amount": 50000, "currency": "INR", "receipt": "order_rcptid_11" }
+        payment = client.order.create(data=data) 
+        payment_id = payment.get('id')
+        
+        order = Order.objects.create(razr_pay_id=payment_id)
+        # instead of looping and adding item set method is better it adds all in single query
+        order.ingredient_object.set(qs)
+
+        return render(req,'buyallform.html',{'all_ingredients':selected,'payment':payment,'razorpay_key':RAZORPAY_KEY})
+
+@method_decorator([csrf_exempt,never_cache],name='dispatch')
+class BuyallpaymentVerifyView(View):
+    
+    def post(self,req): 
+        """
+        make two post req to handle the form data then checkout
+        
+        """
+        print(req.POST.get('test-val'))
+        print(req.POST.get('razorpay_order_id'))
+        client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET_KEY))
+        try:
+            client.utility.verify_payment_signature(req.POST)
+            razr_pay_id = req.POST.get('razorpay_order_id')  
+            order = Order.objects.get(razr_pay_id=razr_pay_id)
+            order.is_paid = True
+            order.save()
+        except:
+            print('Failed')
+
+        return redirect('home')
+        
     
 class BuyselectedView(View):
     def get(self,req):

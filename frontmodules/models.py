@@ -28,3 +28,11 @@ class ReciepieItem(models.Model):
     # dunder method
     def __str__(self):
         return f"{self.recipie.recipie_name}-{self.ingredient.ingredient_name}"
+    
+
+class Order(models.Model):
+    ingredient_object = models.ManyToManyField(Ingredient)
+    is_paid = models.BooleanField(default=False)
+    razr_pay_id = models.CharField(max_length=100,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    

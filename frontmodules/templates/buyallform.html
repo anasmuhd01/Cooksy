@@ -21,6 +21,42 @@
     <h3>{{i}}</h3>
     <p>{{i.price}}</p>
     {% endfor %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="test-val" placeholder="enter name">
+
+
+        <button id="rzp-button1">Pay with Razorpay</button>
+    </form>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        var options = {
+            "key": "{{razorpay_key}}", // Enter the Key ID generated from the Dashboard
+            "amount": "50000", // Amount is in currency subunits. 
+            "currency": "INR",
+            "name": "Acme Corp",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "callback_url": "http://localhost:8000/user/paymentverify",
+            "prefill": {
+                "name": "<name>",
+                "email": "<email>",
+                "contact": "<phone>"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        document.getElementById('rzp-button1').onclick = function (e) {
+            rzp1.open();
+            e.preventDefault();
+        }
+    </script>
 
 
 
