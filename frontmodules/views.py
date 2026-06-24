@@ -8,6 +8,7 @@ import razorpay
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
+from django.http import HttpResponse
 # Create your views here.
 
 
@@ -132,12 +133,24 @@ class BuyallFormView(View):
         data = { "amount": 50000, "currency": "INR", "receipt": "order_rcptid_11" }
         payment = client.order.create(data=data) 
         payment_id = payment.get('id')
-        
+        # print(payment.get('id'))
+
         order = Order.objects.create(razr_pay_id=payment_id)
         # instead of looping and adding item set method is better it adds all in single query
         order.ingredient_object.set(qs)
 
         return render(req,'buyallform.html',{'all_ingredients':selected,'payment':payment,'razorpay_key':RAZORPAY_KEY})
+    
+    
+
+    def post(self,req):
+        """
+        on the model data already created by order in the get request add this user details 
+        fethed from here then redirect to the RAZOR PAY PAGE 
+        """
+        print(req.POST.get('test-val'))
+        
+        return HttpResponse('Success')
 
 @method_decorator([csrf_exempt,never_cache],name='dispatch')
 class BuyallpaymentVerifyView(View):
@@ -145,7 +158,7 @@ class BuyallpaymentVerifyView(View):
     def post(self,req): 
         """
         make two post req to handle the form data then checkout
-        
+
         """
         print(req.POST.get('test-val'))
         print(req.POST.get('razorpay_order_id'))
