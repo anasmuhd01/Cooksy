@@ -127,19 +127,24 @@ class BuyallFormView(View):
         # print('all ingredient',all_ingredients)
         qs = Ingredient.objects.filter(id__in = all_ingredients)
         selected = Ingredient.objects.filter(id__in = all_ingredients)
+
+        total_price = 0
+        for i in selected:
+            total_price += i.price
+        print(total_price)
         
         client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET_KEY))
 
-        data = { "amount": 50000, "currency": "INR", "receipt": "order_rcptid_11" }
+        data = { "amount": total_price*100, "currency": "INR", "receipt": "order_rcptid_11" }
         payment = client.order.create(data=data) 
         payment_id = payment.get('id')
-        # print(payment.get('id'))
+        print(payment.get('id'))
 
         order = Order.objects.create(razr_pay_id=payment_id)
         # instead of looping and adding item set method is better it adds all in single query
         order.ingredient_object.set(qs)
 
-        return render(req,'buyallform.html',{'all_ingredients':selected,'payment':payment,'razorpay_key':RAZORPAY_KEY})
+        return render(req,'buyallform.html',{'all_ingredients':selected,'payment':payment,'razorpay_key':RAZORPAY_KEY,'total_price':total_price})
     
     
 
@@ -148,9 +153,9 @@ class BuyallFormView(View):
         on the model data already created by order in the get request add this user details 
         fethed from here then redirect to the RAZOR PAY PAGE 
         """
-        print(req.POST.get('test-val'))
+        print(req.POST)
         
-        return HttpResponse('Success')
+        return render(req,'payment.html')
 
 @method_decorator([csrf_exempt,never_cache],name='dispatch')
 class BuyallpaymentVerifyView(View):
@@ -160,7 +165,7 @@ class BuyallpaymentVerifyView(View):
         make two post req to handle the form data then checkout
 
         """
-        print(req.POST.get('test-val'))
+        
         print(req.POST.get('razorpay_order_id'))
         client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET_KEY))
         try:

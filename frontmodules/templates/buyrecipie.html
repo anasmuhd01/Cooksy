@@ -1,58 +1,162 @@
-<!doctype html>
-<html lang="en" data-bs-theme="light">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>Title</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap CSS v5.3.8 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>{{recipie_name}}</title>
 </head>
 
-<body>
-    <div>
-        <h1>How To make {{recipie_name}}</h1>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam quasi dolore magnam. Corrupti repudiandae
-            fugiat quod corporis, hic, odio harum minus in temporibus iste accusantium veritatis tenetur, id at
-            voluptatum?Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta odio ullam ab tenetur est optio
-            numquam exercitationem voluptatibus nam voluptate, sunt et, reiciendis, molestias aliquid eaque pariatur
-            placeat deserunt animi!Lorem Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis doloremque
-            aliquid rerum, quasi qui commodi pariatur, libero ipsam magni deleniti debitis ab optio possimus alias
-            suscipit illum, atque facere ipsum?</p>
+<body class="bg-orange-50">
+
+    <div class="max-w-7xl mx-auto py-10 px-5">
+
+        <!-- Hero -->
+        <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl shadow-xl p-10 text-white">
+
+            <h1 class="text-5xl font-bold mb-4">
+                🍗 {{recipie_name}}
+            </h1>
+
+            <p class="text-lg leading-8 opacity-90">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Quibusdam quasi dolore magnam. Corrupti repudiandae fugiat
+                quod corporis, hic, odio harum minus in temporibus iste
+                accusantium veritatis tenetur.
+            </p>
+
+        </div>
+
+
+        <!-- How To Make -->
+        <div class="mt-10 bg-white rounded-2xl shadow-lg p-8">
+
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">
+                👨‍🍳 How To Make
+            </h2>
+
+            <p class="text-gray-600 leading-8">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Soluta odio ullam ab tenetur est optio numquam exercitationem
+                voluptatibus nam voluptate, sunt et, reiciendis, molestias
+                aliquid eaque pariatur placeat deserunt animi.
+            </p>
+
+        </div>
+
+
+        <!-- Ingredients Section -->
+        <div class="grid lg:grid-cols-2 gap-8 mt-10">
+
+            <!-- All Ingredients -->
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+
+                <div class="flex justify-between items-center mb-6">
+
+                    <h2 class="text-2xl font-bold">
+                        🛒 Ingredients
+                    </h2>
+
+                    <a href="{% url 'buy-all' %}"
+                        class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg transition">
+                        Buy All
+                    </a>
+
+                </div>
+
+                {% for item in ingredients %}
+
+                <div class="border rounded-xl p-4 mb-4 hover:shadow-md transition">
+
+                    <div class="flex justify-between">
+
+                        <div>
+
+                            <h3 class="font-semibold text-lg">
+                                {{item.ingredient}}
+                            </h3>
+
+                            <p class="text-gray-500">
+                                {{item.quantity}} g
+                            </p>
+
+                        </div>
+
+                        <div class="text-right">
+
+                            <span class="font-bold text-orange-600">
+                                ₹{{item.ingredient.price}}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- Selected Ingredients -->
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+
+                <div class="flex justify-between items-center mb-6">
+
+                    <h2 class="text-2xl font-bold">
+                        ✅ Selected Ingredients
+                    </h2>
+
+                    <a href="{% url 'buy-selected' %}"
+                        class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition">
+
+                        Buy Selected
+
+                    </a>
+
+                </div>
+
+                {% if user_selected %}
+
+                {% for i in user_selected %}
+
+                <div class="flex justify-between items-center border rounded-xl p-4 mb-4">
+
+                    <span class="font-semibold">
+                        {{i.ingredient_name}}
+                    </span>
+
+                    <span class="font-bold text-orange-600">
+                        ₹{{i.price}}
+                    </span>
+
+                </div>
+
+                {% endfor %}
+
+                {% else %}
+
+                <div class="text-center py-10">
+
+                    <p class="text-gray-500">
+                        No ingredients selected.
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
     </div>
-    <div>
-
-        <h1>Buy all ingredients for - {{recipie_name}}</h1>
-
-        {% for item in ingredients %}
-
-        <h3>{{item.ingredient}}</h3>
-        <p>quantity - {{item.quantity}} g</p>
-        <p>Price - {{item.ingredient.price}}</p>
-        {% endfor %}
-        <a href="{% url 'buy-all' %}" class="btn btn-primary">Buy All</a>
-
-
-    </div>
-
-    <p>---------------------------------</p><br>
-    <p>---------------------------------</p>
-    <div>
-        <h3>Buy only selected </h3>
-        {% for i in user_selected %}
-        <h3>{{i.ingredient_name}}</h3>
-        {% endfor %}
-        <a href="{% url 'buy-selected' %}" class="btn btn-primary">Buy Selected Items</a>
-    </div>
-
-
-
 
 </body>
 

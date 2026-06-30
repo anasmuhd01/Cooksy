@@ -1,242 +1,377 @@
-{% extends 'base.html' %}
-{% block base %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
 
 <body>
-    <!-- <input type="text" name="" id="search-box" placeholder="search product"> -->
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="search-container">
+    <div class="max-w-7xl mx-auto px-6 py-10">
 
-                    <input type="text" id="search-box" class="form-control search-input" placeholder="Search...">
-                    <i class="fas fa-search search-icon"></i>
-                    <div id="results"></div>
-                </div>
-            </div>
+        <div class="text-center mb-10">
+
+            <h1 class="text-5xl font-black">
+                Find Your Ingredients
+            </h1>
+
+            <p class="text-gray-500 mt-3">
+                Choose ingredients you already have and we'll find matching recipes.
+            </p>
+
         </div>
-    </div> -->
-    <!-- <h2 class="text-center mb-4 fw-bold">
-        Find Your Ingredients
-    </h2>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="cooksy-search-wrapper">
-                    <i class="fas fa-search cooksy-search-icon"></i>
-    
-                    <input type="text" id="search-box" class="cooksy-search-input" placeholder="Search ingredients...">
-    
-                    <div id="results"></div>
-                </div>
+
+        <!-- Search -->
+
+        <div class="relative max-w-2xl mx-auto">
+
+            <input id="search-box" type="text" placeholder="Search ingredients..."
+                class="w-full rounded-2xl border border-gray-300 px-6 py-4 focus:ring-2 focus:ring-green-500 outline-none">
+
+            <div id="results"
+                class="hidden absolute left-0 right-0 bg-white rounded-xl shadow-xl mt-2 p-3 z-50 flex flex-wrap gap-2">
             </div>
+
         </div>
-    </div> -->
-    <h2 class="text-center mb-4 fw-bold">
-        Find Your Ingredients
-    </h2>
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
+        <!-- Selected -->
 
-                <div class="cooksy-search-wrapper">
+        <div class="mt-8">
 
-                    <i class="fas fa-search cooksy-search-icon"></i>
+            <h3 class="font-bold mb-3">
+                Selected Ingredients
+            </h3>
 
-                    <input type="text" id="search-box" class="cooksy-search-input" placeholder="Search ingredients...">
-
-                    <div id="results"></div>
-
-                </div>
+            <div id="selected" class="flex flex-wrap gap-3">
 
             </div>
-        </div>
-    </div>
 
-    <!-- <div class="container mt-5">
-        <div class="row ">
+        </div>
+
+        <!-- Ingredients -->
+
+        <div class="flex items-center justify-between mt-10 mb-4">
+
+            <h2 class="text-2xl font-bold">
+                Ingredients
+            </h2>
+
+            <button type="button" id="toggleIngredients" class="text-green-600 font-semibold">
+
+                Hide Ingredients 
+
+            </button>
+
+        </div>
+
+        <div id="ingredientsContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+
             {% for i in ingredients %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                <button class="ingredient-button btn btn-info w-100 mb-2 m-2" data-id="{{i.id}}"
-                    data-name="{{i.ingredient_name}}" style="color:black;">
-                    {% if i.image %}
-                    <img src="{{ i.image.url }}" alt="">
-                    {% else %}
+
+            <button
+                class="ingredient-card bg-white rounded-2xl shadow hover:shadow-xl hover:-translate-y-1 transition p-5 flex flex-col items-center gap-3 border"
+                data-id="{{i.id}}" data-name="{{i.ingredient_name}}">
+
+                {% if i.image %}
+                <img src="{{i.image.url}}" class="w-20 h-20 object-contain">
+                {% endif %}
+
+                <span class="font-semibold">
+
                     {{i.ingredient_name}}
-                    {% endif %}
-                </button>
-            </div>
+
+                </span>
+
+            </button>
+
             {% endfor %}
+
         </div>
-    </div> -->
-    <div class="container mt-5">
-        <div class="row g-3">
-            {% for i in ingredients %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                <button class="recipe-ing-card w-100" data-id="{{ i.id }}" data-name="{{ i.ingredient_name }}">
 
-                    {% if i.image %}
-                    <img src="{{ i.image.url }}" alt="{{ i.ingredient_name }}" class="recipe-ing-card__image">
-                    {% endif %}
-
-                    <span class="recipe-ing-card__title">
-                        {{ i.ingredient_name }}
-                    </span>
-
-                </button>
-            </div>
-            {% endfor %}
-        </div>
     </div>
 
-    <div id="selected" class="m-2"></div> <!-- this div shows the selected ingredients  -->
-    <!-- problem with this button when pressed without ingredient
-     it shows 
-     ValueError at /user/ilist
-Field 'id' expected a number but got ''. 
-     -->
-    <form method="post" action="{% url 'ilist' %}" id="recipie-form">
-        {% csrf_token %}
-        <input type="hidden" id="selected-ingredients" name="selected-ingredients">
-        <button type="submit" class="find-btn m-5">Find Recipies</button>
-    </form>
-    <div class="recipe-gridd">
+    <!-- Floating Bottom Bar -->
 
-        {% if recipies %}
-        <h2>Founded Recipes</h2>
+    <div
+        class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-white shadow-2xl rounded-full px-6 py-4 flex items-center gap-6 z-50 border">
 
-        {% for i in recipies %}
-        <div class="recipe-cardd">
-            <h3>{{ i.recipie_name }}</h3>
-            <p>{{ i.description }}</p>
+        <span id="selected-count" class="font-semibold">
 
-            <a href="{% url 'buyrecipie' i.id %}" class="btn btn-primary">
-                make it
-            </a>
-        </div>
-        {% endfor %}
+            0 Selected
 
-        {% else %}
-        {% if messages %}
-        <h2>No recipies found , Please select any ingredients</h2>
-        {% endif %}
-        {% endif %}
+        </span>
+
+        <form method="POST" id="recipie-form" action="{% url 'ilist' %}">
+
+            {% csrf_token %}
+
+            <input type="hidden" id="selected-ingredients" name="selected-ingredients">
+
+            <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold">
+
+                🍴 Find Recipes
+
+            </button>
+
+        </form>
 
     </div>
+
+    <!-- Recipe Results -->
+
+    {% if recipies %}
+
+    <div class="max-w-7xl mx-auto px-6 mt-24">
+
+        <h2 class="text-4xl font-black mb-8">
+
+            Matching Recipes
+
+        </h2>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {% for i in recipies %}
+
+            <div class="bg-white rounded-3xl shadow-lg p-6">
+
+                <h3 class="font-bold text-2xl">
+
+                    {{i.recipie_name}}
+
+                </h3>
+
+                <p class="text-gray-500 mt-3">
+
+                    {{i.description}}
+
+                </p>
+
+                <a href="{% url 'buyrecipie' i.id %}"
+                    class="inline-block mt-6 bg-green-600 text-white px-5 py-3 rounded-xl">
+
+                    View Recipe 
+
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
 
     <!-- <script>
-
-        const searchBox = document.getElementById("search-box")
-        const results = document.getElementById("results")
-
-
-
-        searchBox.addEventListener("keyup", function () {
-            let query = this.value;
-            fetch(`/search/?q=${query}`)
-                .then(res => res.json())
-                .then(data => {
-                    results.innerHTML = "";
-                    data.forEach(item => {
-                        results.innerHTML += `
-                        <button onclick="selectedIngredient(${item.id},'${item.ingredient_name}')">
-                            ${item.ingredient_name}</button>
-                        `;
-                    })
+        
+                const searchBox = document.getElementById("search-box")
+                const results = document.getElementById("results")
+        
+        
+        
+                searchBox.addEventListener("keyup", function () {
+                    let query = this.value;
+                    fetch(`/search/?q=${query}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            results.innerHTML = "";
+                            data.forEach(item => {
+                                results.innerHTML += `
+                                <button onclick="selectedIngredient(${item.id},'${item.ingredient_name}')">
+                                    ${item.ingredient_name}</button>
+                                `;
+                            })
+                        })
                 })
-        })
-
-    </script> -->
+        
+            </script> -->
     <script>
+
         const searchBox = document.getElementById("search-box");
-        const results = document.getElementById("results");
+            const results = document.getElementById("results");
 
-        searchBox.addEventListener("keyup", function () {
+            searchBox.addEventListener("keyup", function () {
 
-            let query = this.value.trim();
+                let query = this.value.trim();
 
-            if (query === "") {
-                results.innerHTML = "";
-                results.style.display = "none";
-                return;
-            }
-
-            fetch(`/search/?q=${query}`)
-                .then(res => res.json())
-                .then(data => {
-
+                if (query === "") {
                     results.innerHTML = "";
+                    results.classList.add("hidden");
+                    return;
+                }
 
-                    if (data.length === 0) {
-                        results.style.display = "none";
-                        return;
-                    }
+                fetch(`/search/?q=${query}`)
+                    .then(res => res.json())
+                    .then(data => {
 
-                    results.style.display = "flex";
+                        results.innerHTML = "";
 
-                    data.forEach(item => {
-                        results.innerHTML += `
-                        <button
-                            class="cooksy-search-result-item"
-                            onclick="selectedIngredient(${item.id}, '${item.ingredient_name}')">
-                            ${item.ingredient_name}
-                        </button>
-                    `;
+                        if (data.length === 0) {
+                            results.classList.add("hidden");
+                            return;
+                        }
+
+                        results.classList.remove("hidden");
+
+                        data.forEach(item => {
+
+                            results.innerHTML += `
+                <button
+                    class="bg-gray-100 hover:bg-green-600 hover:text-white transition px-3 py-2 rounded-full"
+                    onclick="selectedIngredient(${item.id},'${item.ingredient_name}')">
+
+                    ${item.ingredient_name}
+
+                </button>
+                `;
+
+                        });
+
                     });
-                });
-        });
-    </script>
 
-    <script>
+            });
+        const selected = document.getElementById("selected");
+        const counter = document.getElementById("selected-count");
 
         let selectedIngredients = [];
+
+        function updateCounter() {
+            counter.innerHTML = `${selectedIngredients.length} Selected`;
+        }
+
         function selectedIngredient(id, name) {
-            console.log(selectedIngredients)
-            if (!selectedIngredients.includes(id)) {
-                selectedIngredients.push(id);
-                document.getElementById("selected").innerHTML += `
-                <span id="ingredient-${id}" class="badge bg-success p-3 fs-3">
-                    ${name}
-                    <button onclick="removeIngredient(${id})">❌</button>
-                    </span>
-                `
+
+            if (selectedIngredients.includes(id))
+                return;
+
+            selectedIngredients.push(id);
+
+            updateCounter();
+
+            selected.innerHTML += `
+        <span id="ingredient-${id}"
+        class="bg-green-600 text-white px-4 py-2 rounded-full flex items-center gap-2">
+
+            ${name}
+
+            <button
+                onclick="removeIngredient(${id})">
+
+                ✕
+
+            </button>
+
+        </span>
+    `;
+
+            const card = document.querySelector(`[data-id="${id}"]`);
+
+            if (card) {
+
+                card.classList.add(
+                    "border-green-600",
+                    "bg-green-50"
+                );
+
             }
+
         }
 
         function removeIngredient(id) {
-            selectedIngredients = selectedIngredients.filter(item => item !== id);
-            document.getElementById(`ingredient-${id}`).remove()
-        }
 
+            selectedIngredients =
+                selectedIngredients.filter(x => x != id);
 
-        const ingredientButtons = document.querySelectorAll(".recipe-ing-card");
+            document.getElementById(`ingredient-${id}`)?.remove();
 
-        ingredientButtons.forEach(button => {
-            button.addEventListener("click", function () {
-                console.log(this.dataset.name)
-                const id = Number(this.dataset.id);
-                const name = this.dataset.name;
-                selectedIngredient(id, name);
+            updateCounter();
 
-            });
-        });
+            const card =
+                document.querySelector(`[data-id="${id}"]`);
 
-        const form = document.getElementById("recipie-form")
-        form.addEventListener("submit", function () {
-            if (!selectedIngredients || selectedIngredients.length === 0) {
-                e.preventDefault();
-                alert("Please select at least one ingredient");
-                return;
+            if (card) {
+
+                card.classList.remove(
+                    "border-green-600",
+                    "bg-green-50"
+                );
+
             }
 
-            document.getElementById('selected-ingredients').value = selectedIngredients;
-        })
+        }
 
+        document.querySelectorAll(".ingredient-card").forEach(card => {
+
+            card.onclick = function () {
+
+                selectedIngredient(
+
+                    Number(this.dataset.id),
+
+                    this.dataset.name
+
+                );
+
+            }
+
+        });
+
+        const form =
+            document.getElementById("recipie-form");
+
+        form.addEventListener("submit", function (e) {
+
+            if (selectedIngredients.length == 0) {
+
+                e.preventDefault();
+
+                alert("Select at least one ingredient.");
+
+                return;
+
+            }
+
+            document.getElementById(
+                "selected-ingredients"
+            ).value = selectedIngredients;
+
+        });
+
+
+
+        //for the collapse
+        const toggleBtn = document.getElementById("toggleIngredients");
+            const ingredientContainer = document.getElementById("ingredientsContainer");
+
+            let hidden = false;
+
+            toggleBtn.addEventListener("click", () => {
+
+                hidden = !hidden;
+
+                if (hidden) {
+
+                    ingredientContainer.classList.add("hidden");
+
+                    toggleBtn.innerHTML = "Show Ingredients ▼";
+
+                }
+
+                else {
+
+                    ingredientContainer.classList.remove("hidden");
+
+                    toggleBtn.innerHTML = "Hide Ingredients ▲";
+
+                }
+
+            });
     </script>
-
-
 </body>
 
-{% endblock base %}
+</html>

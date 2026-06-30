@@ -6,442 +6,416 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>COOKSY</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <style>
-        body {
-            background: #f3f4f6;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        /* NAVBAR */
-
-        .navbar {
-            background: white;
-            padding: 20px 0;
-        }
-
-        .logo {
-            font-size: 42px;
-            font-weight: 800;
-            color: #15803d;
-        }
-
-        .nav-link {
-            font-weight: 600;
-            color: black;
-            margin: 0 15px;
-        }
-
-        .login-btn {
-            background: #15803d;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* HERO */
-
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero-title {
-            font-size: 88px;
-            font-weight: 800;
-            line-height: 1.05;
-        }
-
-        .green {
-            color: #15803d;
-        }
-
-        .orange {
-            color: #f97316;
-        }
-
-        .hero-text {
-            margin-top: 25px;
-            font-size: 24px;
-            color: #555;
-            max-width: 600px;
-        }
-
-        .hero-buttons {
-            margin-top: 40px;
-        }
-
-        .find-btn {
-            background: #15803d;
-            color: white;
-            border: none;
-            padding: 18px 35px;
-            border-radius: 14px;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .work-btn {
-            background: white;
-            border: none;
-            padding: 18px 35px;
-            border-radius: 14px;
-            font-size: 18px;
-            font-weight: 600;
-            margin-left: 15px;
-        }
-
-        .hero-image {
-            width: 100%;
-            height: 650px;
-            object-fit: cover;
-            border-radius: 35px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, .15);
-        }
-
-        /* HOW IT WORKS */
-
-        .section-title {
-            text-align: center;
-            font-size: 50px;
-            font-weight: 800;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 35px;
-            border-radius: 20px;
-            text-align: center;
-            height: 100%;
-            transition: .3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #dcfce7;
-            color: #15803d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: auto;
-            font-size: 30px;
-        }
-
-        /* RECIPES */
-
-        .recipe-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, .08);
-        }
-
-        .recipe-card img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-        }
-
-        .recipe-body {
-            padding: 20px;
-        }
-
-        /* CTA */
-
-        .cta {
-            background: #15803d;
-            color: white;
-            border-radius: 30px;
-            padding: 70px;
-        }
-
-        /* FOOTER */
-
-        footer {
-            background: #111827;
-            color: white;
-            padding: 70px 0;
-        }
-
-        footer a {
-            color: #d1d5db;
-            text-decoration: none;
-        }
-
-        @media(max-width:991px) {
-
-            .hero-title {
-                font-size: 55px;
-            }
-
-            .hero-image {
-                height: 400px;
-                margin-top: 40px;
-            }
-
-            .hero {
-                padding: 60px 0;
-            }
-
-        }
-
-        .recipe-gridd {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .recipe-cardd {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .recipe-ing-card {
-    width: 100%;
-    min-height: 85px;
-
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    padding: 12px;
-
-    background: #ffffff;
-    border: 2px solid #e5e7eb;   /* subtle gray border */
-    border-radius: 18px;
-
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-
-.recipe-ing-card:hover {
-    border-color: #16a34a;       /* theme green */
-    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
-    transform: translateY(-2px);
-}
-
-.recipe-ing-card__image {
-    width: 55px;
-    height: 55px;
-
-    object-fit: contain;
-    background: #f9fafb;
-
-    border-radius: 50%;
-    border: 2px solid #d1d5db;   /* soft gray */
-
-    padding: 4px;
-    flex-shrink: 0;
-}
-
-.recipe-ing-card__title {
-    color: #1f2937;
-    font-size: 14px;
-    font-weight: 600;
-}
-/* Search Wrapper */
-.cooksy-search-wrapper {
-    position: relative;
-}
-
-/* Search Input */
-.cooksy-search-input {
-    width: 100%;
-    height: 58px;
-
-    padding-left: 50px;
-    padding-right: 20px;
-
-    border: 2px solid #d1d5db;
-    border-radius: 18px;
-
-    background: #fff;
-
-    font-size: 15px;
-
-    transition: all 0.25s ease;
-}
-
-.cooksy-search-input:focus {
-    outline: none;
-    border-color: #16a34a;
-
-    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
-}
-
-/* Search Icon */
-.cooksy-search-icon {
-    position: absolute;
-    left: 18px;
-    top: 29px;
-
-    transform: translateY(-50%);
-
-    color: #16a34a;
-    font-size: 16px;
-}
-
-/* Results Dropdown */
-#results {
-    display: none;
-
-    position: absolute;
-    top: 70px;
-    left: 0;
-
-    width: 100%;
-
-    background: white;
-
-    border-radius: 16px;
-
-    padding: 12px;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-
-    z-index: 999;
-
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-/* Result Pills */
-.cooksy-search-result-item {
-    border: 1px solid #d1d5db;
-
-    background: #fff;
-
-    color: #374151;
-
-    padding: 8px 14px;
-
-    border-radius: 999px;
-
-    font-size: 14px;
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-}
-
-.cooksy-search-result-item:hover {
-    background: #16a34a;
-    color: white;
-    border-color: #16a34a;
-}
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
+    <body class="bg-slate-50 text-gray-800">
 
-    <nav class="navbar navbar-expand-lg">
+        <!-- Background Decorations -->
 
-        <div class="container">
+        <div class="fixed inset-0 -z-10 overflow-hidden">
 
-            <a class="navbar-brand logo" href="#">
-                <i class="fa-solid fa-utensils"></i>
-                COOKSY
-            </a>
+            <div class="absolute w-96 h-96 bg-green-200 rounded-full blur-3xl opacity-30 -top-20 -left-24"></div>
 
-            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="menu">
-
-                <ul class="navbar-nav mx-auto">
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#how-it-works">How It Works</a>
-                    </li>
-
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="#">Recipes</a>
-                    </li> -->
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'ilist' %}">Ingredients</a>
-                    </li>
-
-                </ul>
-
-
-
+            <div class="absolute w-[450px] h-[450px] bg-orange-200 rounded-full blur-3xl opacity-20 top-72 right-0">
             </div>
 
         </div>
 
-    </nav>
-    {% block base %}
+        <!-- NAVBAR -->
 
-    {% endblock base %}
-    <!-- FOOTER -->
+        <nav class="fixed top-5 left-0 right-0 z-50">
 
-    <footer>
+            <div class="max-w-7xl mx-auto px-6">
 
-        <div class="container">
+                <div class="bg-white/80 backdrop-blur-xl border border-gray-200 rounded-full shadow-xl">
 
-            <div class="row">
+                    <div class="flex items-center justify-between px-8 py-4">
 
-                <div class="col-md-4">
+                        <!-- Logo -->
 
-                    <h2>COOKSY</h2>
+                        <a href="{% url 'home' %}" class="flex items-center gap-3">
 
-                    <p>
-                        Smart recipe discovery platform.
-                    </p>
+                            <div
+                                class="w-11 h-11 rounded-full bg-green-600 text-white flex items-center justify-center text-lg">
 
-                </div>
+                                🍴
 
-                <div class="col-md-4">
+                            </div>
 
-                    <h5>Links</h5>
+                            <div>
 
-                    <p><a href="#">Home</a></p>
-                    <p><a href="#">Recipes</a></p>
-                    <p><a href="#">Ingredients</a></p>
+                                <h1 class="font-black text-2xl text-green-700">
 
-                </div>
+                                    COOKSY
 
-                <div class="col-md-4">
+                                </h1>
 
-                    <h5>Contact</h5>
+                            </div>
 
-                    <p>support@cooksy.com</p>
+                        </a>
+
+                        <!-- Desktop Menu -->
+
+                        <div class="hidden lg:flex items-center gap-10">
+
+                            <a href="{% url 'home' %}" class="font-medium hover:text-green-600 transition">
+
+                                Home
+
+                            </a>
+
+                            <a href="#recipes" class="font-medium hover:text-green-600 transition">
+
+                                Recipes
+
+                            </a>
+
+                            <a href="#how" class="font-medium hover:text-green-600 transition">
+
+                                How It Works
+
+                            </a>
+
+                            <a href="{% url 'ilist' %}" class="font-medium hover:text-green-600 transition">
+
+                                Ingredients
+
+                            </a>
+
+                        </div>
+
+                        <!-- Button -->
+
+                        <a href="#recipes"
+                            class="hidden lg:inline-flex bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold transition">
+
+                            Start Cooking
+
+                        </a>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+        </nav>
 
-    </footer>
+        <!-- HERO -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <section class="pt-44 pb-24">
 
-</body>
+            <div class="max-w-7xl mx-auto px-6">
+
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+                    <!-- LEFT -->
+
+                    <div>
+
+                        <span
+                            class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-5 py-2 rounded-full font-semibold">
+
+                            🌱 Smart Cooking Platform
+
+                        </span>
+
+                        <h1 class="mt-8 text-6xl lg:text-7xl font-black leading-tight">
+
+                            Cook
+
+                            <span class="text-green-600">
+
+                                Smarter
+
+                            </span>
+
+                            <br>
+
+                            Waste
+
+                            <span class="text-orange-500">
+
+                                Less.
+
+                            </span>
+
+                        </h1>
+
+                        <p class="mt-8 text-xl text-gray-600 leading-9 max-w-xl">
+
+                            Choose ingredients already in your kitchen.
+
+                            Discover delicious recipes instantly.
+
+                            Only buy what you're missing and reduce food waste effortlessly.
+
+                        </p>
+
+                        <div class="flex flex-wrap gap-5 mt-10">
+
+                            <a href="{% url 'ilist' %}"
+                                class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition">
+
+                                Find Ingredients
+
+                            </a>
+
+                            <a href="#recipes"
+                                class="bg-white border border-gray-200 hover:border-green-600 px-8 py-4 rounded-2xl font-semibold transition">
+
+                                Browse Recipes
+
+                            </a>
+
+                        </div>
+
+                        <!-- Stats -->
+
+                        <div class="grid grid-cols-3 gap-6 mt-14">
+
+                            <div>
+
+                                <h2 class="text-4xl font-black text-green-700">
+
+                                    10K+
+
+                                </h2>
+
+                                <p class="text-gray-500">
+
+                                    Recipes
+
+                                </p>
+
+                            </div>
+
+                            <div>
+
+                                <h2 class="text-4xl font-black text-green-700">
+
+                                    800+
+
+                                </h2>
+
+                                <p class="text-gray-500">
+
+                                    Ingredients
+
+                                </p>
+
+                            </div>
+
+                            <div>
+
+                                <h2 class="text-4xl font-black text-green-700">
+
+                                    35K+
+
+                                </h2>
+
+                                <p class="text-gray-500">
+
+                                    Happy Users
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT -->
+
+                    <div class="relative">
+
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900"
+                            class="rounded-[40px] shadow-2xl w-full object-cover">
+
+                        <!-- Floating Card -->
+
+                        <div class="absolute -left-8 top-12 bg-white rounded-3xl shadow-xl p-5 w-64">
+
+                            <div class="flex items-center gap-4">
+
+                                <div class="text-4xl">
+
+                                    🥗
+
+                                </div>
+
+                                <div>
+
+                                    <h3 class="font-bold">
+
+                                        Fresh Salad
+
+                                    </h3>
+
+                                    <p class="text-gray-500 text-sm">
+
+                                        Ready in 15 mins
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="absolute -right-8 bottom-10 bg-white rounded-3xl shadow-xl p-5">
+
+                            <div class="flex items-center gap-4">
+
+                                <div class="text-yellow-400 text-2xl">
+
+                                    ★★★★★
+
+                                </div>
+
+                                <div>
+
+                                    <p class="font-bold">
+
+                                        4.9 Rating
+
+                                    </p>
+
+                                    <p class="text-gray-500 text-sm">
+
+                                        12k Reviews
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- FEATURE STRIP -->
+
+        <section class="pb-20">
+
+            <div class="max-w-7xl mx-auto px-6">
+
+                <div class="bg-white rounded-[35px] shadow-lg border border-gray-100">
+
+                    <div class="grid md:grid-cols-4">
+
+                        <div class="p-10">
+
+                            <div class="text-5xl mb-5">
+
+                                🥕
+
+                            </div>
+
+                            <h3 class="font-bold text-xl">
+
+                                Fresh Ingredients
+
+                            </h3>
+
+                            <p class="text-gray-500 mt-3">
+
+                                Use what's already in your kitchen.
+
+                            </p>
+
+                        </div>
+
+                        <div class="p-10 border-l">
+
+                            <div class="text-5xl mb-5">
+
+                                📖
+
+                            </div>
+
+                            <h3 class="font-bold text-xl">
+
+                                Smart Recipes
+
+                            </h3>
+
+                            <p class="text-gray-500 mt-3">
+
+                                Get personalized recipe ideas.
+
+                            </p>
+
+                        </div>
+
+                        <div class="p-10 border-l">
+
+                            <div class="text-5xl mb-5">
+
+                                🛒
+
+                            </div>
+
+                            <h3 class="font-bold text-xl">
+
+                                Shopping List
+
+                            </h3>
+
+                            <p class="text-gray-500 mt-3">
+
+                                Buy only missing ingredients.
+
+                            </p>
+
+                        </div>
+
+                        <div class="p-10 border-l">
+
+                            <div class="text-5xl mb-5">
+
+                                🌍
+
+                            </div>
+
+                            <h3 class="font-bold text-xl">
+
+                                Reduce Waste
+
+                            </h3>
+
+                            <p class="text-gray-500 mt-3">
+
+                                Save food, money and the environment.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- next s -->
+
+
+    </body>
 
 </html>

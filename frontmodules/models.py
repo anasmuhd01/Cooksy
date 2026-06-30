@@ -35,4 +35,8 @@ class Order(models.Model):
     is_paid = models.BooleanField(default=False)
     razr_pay_id = models.CharField(max_length=100,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    customer_name = models.CharField(max_length=100,blank=True)
+    customer_email = models.CharField(max_length=100,blank=True)
+    customer_phone = models.CharField(max_length=10,blank=True)
+    customer_address = models.TextField(blank=True)
     
