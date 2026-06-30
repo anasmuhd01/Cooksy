@@ -136,10 +136,7 @@ class BuyallFormView(View):
         return render(req,'buyallform.html',{'all_ingredients':selected,'total_price':total_price})
 
     def post(self,req):
-        """
-        on the model data already created by order in the get request add this user details 
-        fethed from here then redirect to the RAZOR PAY PAGE 
-        """
+        
         # print(req.POST)
         name = req.POST.get('name')
         email = req.POST.get('email')
@@ -166,25 +163,6 @@ class BuyallFormView(View):
         order.ingredient_object.set(selected)
 
         return render(req,'payment.html',{'payment':payment,'razorpay_key':RAZORPAY_KEY,'total_price':total_price})
-
-@method_decorator([csrf_exempt,never_cache],name='dispatch')
-class PaymentVerifyView(View):
-    
-    def post(self,req): 
-        
-        print(req.POST.get('razorpay_order_id'))
-        client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET_KEY))
-        try:
-            client.utility.verify_payment_signature(req.POST)
-            razr_pay_id = req.POST.get('razorpay_order_id')  
-            order = Order.objects.get(razr_pay_id=razr_pay_id)
-            order.is_paid = True
-            order.save()
-        except:
-            print('Failed')
-
-        return redirect('home')
-        
     
 class BuyselectedView(View):
     def get(self,req):
@@ -223,3 +201,24 @@ class BuyselectedView(View):
         order.ingredient_object.set(selected)
 
         return render(req,'payment.html',{'payment':payment,'razorpay_key':RAZORPAY_KEY,'total_price':total_price})
+
+
+@method_decorator([csrf_exempt,never_cache],name='dispatch')
+class PaymentVerifyView(View):
+    
+    def post(self,req): 
+        
+        print(req.POST.get('razorpay_order_id'))
+        client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET_KEY))
+        try:
+            client.utility.verify_payment_signature(req.POST)
+            razr_pay_id = req.POST.get('razorpay_order_id')  
+            order = Order.objects.get(razr_pay_id=razr_pay_id)
+            order.is_paid = True
+            order.save()
+        except:
+            print('Failed')
+
+        return redirect('home')
+        
+    
