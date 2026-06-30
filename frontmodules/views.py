@@ -168,13 +168,9 @@ class BuyallFormView(View):
         return render(req,'payment.html',{'payment':payment,'razorpay_key':RAZORPAY_KEY,'total_price':total_price})
 
 @method_decorator([csrf_exempt,never_cache],name='dispatch')
-class BuyallpaymentVerifyView(View):
+class PaymentVerifyView(View):
     
     def post(self,req): 
-        """
-        make two post req to handle the form data then checkout
-
-        """
         
         print(req.POST.get('razorpay_order_id'))
         client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET_KEY))
@@ -194,17 +190,36 @@ class BuyselectedView(View):
     def get(self,req):
         selected = req.session.get('user_selected_items')
 
-        toatl_price = 0
+        total_price = 0
         
         ingredients = Ingredient.objects.filter(id__in = selected)
 
         for i in ingredients:
-            toatl_price += i.price
-        return render(req,'buyselectedform.html',{'selected_ingredients':ingredients,'total_price':toatl_price})
+            total_price += i.price
+        return render(req,'buyselectedform.html',{'selected_ingredients':ingredients,'total_price':total_price})
     
     def post(self,req):
 
+        selected = req.session.get('user_selected_items')
+        total_price = 0
+        ingredients = Ingredient.objects.filter(id__in = selected)
+
+        for i in ingredients:
+            total_price += i.price
         name = req.POST.get('name')
         email = req.POST.get('email')
         phone = req.POST.get('phone')
         address = req.POST.get('address')
+
+        client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET_KEY))
+
+        data = { "amount": total_price*100, "currency": "INR", "receipt": "order_rcptid_11" }
+        payment = client.order.create(data=data) 
+        payment_id = payment.get('id')
+        # print(payment.get('id'))
+
+        order = Order.objects.create(razr_pay_id=payment_id,customer_name=name,customer_email=email,customer_phone=phone,customer_address=address)
+        # instead of looping and adding item set method is better it adds all in single query
+        order.ingredient_object.set(selected)
+
+        return render(req,'payment.html',{'payment':payment,'razorpay_key':RAZORPAY_KEY,'total_price':total_price})

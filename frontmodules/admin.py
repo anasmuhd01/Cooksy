@@ -6,3 +6,4 @@ from frontmodules.models import *
 admin.site.register(Recipie)
 admin.site.register(Ingredient)
 admin.site.register(ReciepieItem)
+admin.site.register(Order)

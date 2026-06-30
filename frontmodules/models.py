@@ -40,3 +40,8 @@ class Order(models.Model):
     customer_phone = models.CharField(max_length=10,blank=True)
     customer_address = models.TextField(blank=True)
     
+
+    def __str__(self):
+        if self.is_paid: 
+            return f"new order: {self.created_at} paid order"
+        return f"NOT PAID"
