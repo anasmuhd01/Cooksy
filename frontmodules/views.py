@@ -50,8 +50,8 @@ class IngredientListView(View):
         for recipie_id, match in matched_recipies_count:
             recipie_item = Recipie.objects.get(id=recipie_id)
             matches.append(recipie_item)
-
-        messages.error(req,"Please Select Atleast One Ingredient")
+        if not matches:
+            messages.error(req,"No recipes found.")
         return render(req,'ingredientlist.html',{'ingredients':ingredients,'recipies':matches,'user_input':splitted_data})
  
     def post(self,req):

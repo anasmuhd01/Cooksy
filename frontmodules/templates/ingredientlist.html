@@ -4,160 +4,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Find Recipes</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <script src="https://cdn.tailwindcss.com"></script>
+<body class="bg-gray-50">
 
     <div class="max-w-7xl mx-auto px-6 py-10">
 
+        <!-- Heading -->
+
         <div class="text-center mb-10">
 
-            <h1 class="text-5xl font-black">
+            <h1 class="text-5xl font-black text-gray-800">
                 Find Your Ingredients
             </h1>
 
             <p class="text-gray-500 mt-3">
-                Choose ingredients you already have and we'll find matching recipes.
+                Select the ingredients you have and discover recipes you can cook.
             </p>
 
         </div>
 
         <!-- Search -->
 
-        <div class="relative max-w-2xl mx-auto">
+        <div class="relative max-w-2xl mx-auto mb-10">
 
-            <input id="search-box" type="text" placeholder="Search ingredients..."
-                class="w-full rounded-2xl border border-gray-300 px-6 py-4 focus:ring-2 focus:ring-green-500 outline-none">
+            <input type="text" id="search-box" placeholder="Search ingredients..."
+                class="w-full border rounded-xl px-5 py-4 focus:ring-2 focus:ring-green-500 outline-none">
 
             <div id="results"
-                class="hidden absolute left-0 right-0 bg-white rounded-xl shadow-xl mt-2 p-3 z-50 flex flex-wrap gap-2">
+                class="hidden absolute left-0 right-0 mt-2 bg-white shadow-lg rounded-xl p-3 flex flex-wrap gap-2 z-50">
+
             </div>
 
         </div>
 
-        <!-- Selected -->
-
-        <div class="mt-8">
-
-            <h3 class="font-bold mb-3">
-                Selected Ingredients
-            </h3>
-
-            <div id="selected" class="flex flex-wrap gap-3">
-
+        <!-- Selected Ingredients -->
+        
+        <div class="bg-white rounded-2xl shadow p-6 mb-8 max-w-3xl mx-auto">
+        
+            <div class="flex justify-between items-center mb-4">
+        
+                <h2 class="text-xl font-bold">
+        
+                    Selected Ingredients
+        
+                </h2>
+        
+                <span id="selected-count" class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+        
+                    0 Selected
+        
+                </span>
+        
             </div>
-
+        
+            <div id="selected" class="flex flex-wrap gap-3 min-h-[40px] mb-4">
+        
+            </div>
+        
+            <!-- Error Message -->
+        
+            <p id="message" class="hidden text-red-600 font-medium mb-4">
+        
+            </p>
+        
+            <form id="recipie-form" method="POST" action="{% url 'ilist' %}">
+        
+                {% csrf_token %}
+        
+                <input type="hidden" id="selected-ingredients" name="selected-ingredients">
+        
+                <button class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold">
+        
+                    🍴 Find Recipes
+        
+                </button>
+        
+            </form>
+        
         </div>
 
         <!-- Ingredients -->
 
-        <div class="flex items-center justify-between mt-10 mb-4">
+        <div class="flex justify-between items-center mb-6">
 
-            <h2 class="text-2xl font-bold">
+            <h2 class="text-3xl font-bold">
+
                 Ingredients
+
             </h2>
 
-            <button type="button" id="toggleIngredients" class="text-green-600 font-semibold">
+            <button id="show-more-btn" class="text-green-600 font-semibold">
 
-                Hide Ingredients 
+                Show More ↓
 
             </button>
 
         </div>
 
-        <div id="ingredientsContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+        <div id="ingredients-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
 
             {% for i in ingredients %}
 
             <button
-                class="ingredient-card bg-white rounded-2xl shadow hover:shadow-xl hover:-translate-y-1 transition p-5 flex flex-col items-center gap-3 border"
-                data-id="{{i.id}}" data-name="{{i.ingredient_name}}">
+                class="ingredient-card bg-white border rounded-xl p-5 hover:border-green-600 hover:shadow-md transition"
+                data-id="{{i.id}}" data-name="{{i.ingredient_name}}" {% if forloop.counter > 15 %}
+                style="display:none;"
+                {% endif %}>
 
                 {% if i.image %}
-                <img src="{{i.image.url}}" class="w-20 h-20 object-contain">
+
+                <img src="{{i.image.url}}" class="w-16 h-16 object-contain mx-auto mb-3">
+
                 {% endif %}
 
-                <span class="font-semibold">
+                <p class="font-semibold">
 
                     {{i.ingredient_name}}
 
-                </span>
-
-            </button>
-
-            {% endfor %}
-
-        </div>
-
-    </div>
-
-    <!-- Floating Bottom Bar -->
-
-    <div
-        class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-white shadow-2xl rounded-full px-6 py-4 flex items-center gap-6 z-50 border">
-
-        <span id="selected-count" class="font-semibold">
-
-            0 Selected
-
-        </span>
-
-        <form method="POST" id="recipie-form" action="{% url 'ilist' %}">
-
-            {% csrf_token %}
-
-            <input type="hidden" id="selected-ingredients" name="selected-ingredients">
-
-            <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold">
-
-                🍴 Find Recipes
-
-            </button>
-
-        </form>
-
-    </div>
-
-    <!-- Recipe Results -->
-
-    {% if recipies %}
-
-    <div class="max-w-7xl mx-auto px-6 mt-24">
-
-        <h2 class="text-4xl font-black mb-8">
-
-            Matching Recipes
-
-        </h2>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {% for i in recipies %}
-
-            <div class="bg-white rounded-3xl shadow-lg p-6">
-
-                <h3 class="font-bold text-2xl">
-
-                    {{i.recipie_name}}
-
-                </h3>
-
-                <p class="text-gray-500 mt-3">
-
-                    {{i.description}}
-
                 </p>
 
-                <a href="{% url 'buyrecipie' i.id %}"
-                    class="inline-block mt-6 bg-green-600 text-white px-5 py-3 rounded-xl">
-
-                    View Recipe 
-
-                </a>
-
-            </div>
+            </button>
 
             {% endfor %}
 
@@ -165,111 +135,164 @@
 
     </div>
 
+    {% if recipies %}
+    
+    <div class="max-w-7xl mx-auto px-6 pb-12">
+    
+        <h2 class="text-4xl font-black mb-8">
+            Matching Recipes
+        </h2>
+    
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+            {% for i in recipies %}
+    
+            <div class="bg-white rounded-2xl shadow p-6">
+    
+                <h3 class="text-2xl font-bold">
+                    {{ i.recipie_name }}
+                </h3>
+    
+                <p class="text-gray-500 mt-4">
+                    {{ i.description }}
+                </p>
+    
+                <a href="{% url 'buyrecipie' i.id %}"
+                    class="inline-block mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg">
+    
+                    View Recipe
+    
+                </a>
+    
+            </div>
+    
+            {% endfor %}
+    
+        </div>
+    
+    </div>
+    
+    {% elif user_input %}
+    
+    <div class="max-w-3xl mx-auto mt-12">
+    
+        <div class="bg-yellow-50 border border-yellow-300 rounded-xl p-8 text-center">
+    
+            <h2 class="text-2xl font-bold text-yellow-700">
+    
+                😔 No Recipes Found
+    
+            </h2>
+    
+            <p class="text-gray-600 mt-2">
+    
+                Try selecting different ingredients.
+    
+            </p>
+    
+        </div>
+    
+    </div>
+    
     {% endif %}
 
-    <!-- <script>
-        
-                const searchBox = document.getElementById("search-box")
-                const results = document.getElementById("results")
-        
-        
-        
-                searchBox.addEventListener("keyup", function () {
-                    let query = this.value;
-                    fetch(`/search/?q=${query}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            results.innerHTML = "";
-                            data.forEach(item => {
-                                results.innerHTML += `
-                                <button onclick="selectedIngredient(${item.id},'${item.ingredient_name}')">
-                                    ${item.ingredient_name}</button>
-                                `;
-                            })
-                        })
-                })
-        
-            </script> -->
+
     <script>
 
+        // --------------------------
+        // Search Ingredients
+        // --------------------------
+
         const searchBox = document.getElementById("search-box");
-            const results = document.getElementById("results");
+        const results = document.getElementById("results");
 
-            searchBox.addEventListener("keyup", function () {
+        searchBox.addEventListener("keyup", function () {
 
-                let query = this.value.trim();
+            let query = this.value.trim();
 
-                if (query === "") {
+            if (query === "") {
+                results.innerHTML = "";
+                results.classList.add("hidden");
+                return;
+            }
+
+            fetch(`/search/?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+
                     results.innerHTML = "";
-                    results.classList.add("hidden");
-                    return;
-                }
 
-                fetch(`/search/?q=${query}`)
-                    .then(res => res.json())
-                    .then(data => {
+                    if (data.length === 0) {
+                        results.classList.add("hidden");
+                        return;
+                    }
 
-                        results.innerHTML = "";
+                    results.classList.remove("hidden");
 
-                        if (data.length === 0) {
-                            results.classList.add("hidden");
-                            return;
-                        }
+                    data.forEach(item => {
 
-                        results.classList.remove("hidden");
+                        results.innerHTML += `
+                        <button
+                            class="px-3 py-2 rounded-full bg-gray-100 hover:bg-green-600 hover:text-white transition"
+                            onclick="selectIngredient(${item.id}, '${item.ingredient_name}')">
 
-                        data.forEach(item => {
+                            ${item.ingredient_name}
 
-                            results.innerHTML += `
-                <button
-                    class="bg-gray-100 hover:bg-green-600 hover:text-white transition px-3 py-2 rounded-full"
-                    onclick="selectedIngredient(${item.id},'${item.ingredient_name}')">
-
-                    ${item.ingredient_name}
-
-                </button>
-                `;
-
-                        });
+                        </button>
+                    `;
 
                     });
 
-            });
-        const selected = document.getElementById("selected");
-        const counter = document.getElementById("selected-count");
+                });
+
+        });
+
+
+        // --------------------------
+        // Selected Ingredients
+        // --------------------------
 
         let selectedIngredients = [];
 
+        const selected = document.getElementById("selected");
+        const counter = document.getElementById("selected-count");
+        const message = document.getElementById("message");
+
         function updateCounter() {
+
             counter.innerHTML = `${selectedIngredients.length} Selected`;
+
         }
 
-        function selectedIngredient(id, name) {
+        function selectIngredient(id, name) {
+            message.classList.add("hidden");
 
             if (selectedIngredients.includes(id))
                 return;
 
             selectedIngredients.push(id);
 
+            selected.innerHTML += `
+
+            <span
+                id="ingredient-${id}"
+                class="bg-green-600 text-white px-4 py-2 rounded-full flex items-center gap-2">
+
+                ${name}
+
+                <button onclick="removeIngredient(${id})">
+
+                    ✕
+
+                </button>
+
+            </span>
+
+        `;
+
             updateCounter();
 
-            selected.innerHTML += `
-        <span id="ingredient-${id}"
-        class="bg-green-600 text-white px-4 py-2 rounded-full flex items-center gap-2">
-
-            ${name}
-
-            <button
-                onclick="removeIngredient(${id})">
-
-                ✕
-
-            </button>
-
-        </span>
-    `;
-
-            const card = document.querySelector(`[data-id="${id}"]`);
+            let card = document.querySelector(`[data-id="${id}"]`);
 
             if (card) {
 
@@ -285,14 +308,13 @@
         function removeIngredient(id) {
 
             selectedIngredients =
-                selectedIngredients.filter(x => x != id);
+                selectedIngredients.filter(item => item !== id);
 
             document.getElementById(`ingredient-${id}`)?.remove();
 
             updateCounter();
 
-            const card =
-                document.querySelector(`[data-id="${id}"]`);
+            let card = document.querySelector(`[data-id="${id}"]`);
 
             if (card) {
 
@@ -305,73 +327,108 @@
 
         }
 
-        document.querySelectorAll(".ingredient-card").forEach(card => {
 
-            card.onclick = function () {
+        // --------------------------
+        // Ingredient Cards
+        // --------------------------
 
-                selectedIngredient(
+        const ingredientCards =
+            document.querySelectorAll(".ingredient-card");
 
-                    Number(this.dataset.id),
+        ingredientCards.forEach(card => {
 
-                    this.dataset.name
+            card.addEventListener("click", function () {
 
-                );
+                let id = Number(this.dataset.id);
+                let name = this.dataset.name;
 
-            }
+                selectIngredient(id, name);
 
-        });
-
-        const form =
-            document.getElementById("recipie-form");
-
-        form.addEventListener("submit", function (e) {
-
-            if (selectedIngredients.length == 0) {
-
-                e.preventDefault();
-
-                alert("Select at least one ingredient.");
-
-                return;
-
-            }
-
-            document.getElementById(
-                "selected-ingredients"
-            ).value = selectedIngredients;
+            });
 
         });
 
 
+        // --------------------------
+        // Form Submit
+        // --------------------------
 
-        //for the collapse
-        const toggleBtn = document.getElementById("toggleIngredients");
-            const ingredientContainer = document.getElementById("ingredientsContainer");
+        
 
-            let hidden = false;
+        const form = document.getElementById("recipie-form");
 
-            toggleBtn.addEventListener("click", () => {
+            form.addEventListener("submit", function (e) {
 
-                hidden = !hidden;
+                if (selectedIngredients.length === 0) {
 
-                if (hidden) {
+                    e.preventDefault();
 
-                    ingredientContainer.classList.add("hidden");
+                    message.innerHTML = "⚠ Please select at least one ingredient.";
 
-                    toggleBtn.innerHTML = "Show Ingredients ▼";
+                    message.classList.remove("hidden");
 
+                    return;
                 }
 
-                else {
+                message.classList.add("hidden");
 
-                    ingredientContainer.classList.remove("hidden");
+                document.getElementById("selected-ingredients").value =
+                    selectedIngredients.join(",");
 
-                    toggleBtn.innerHTML = "Hide Ingredients ▲";
+            });
+
+              
+
+
+        // --------------------------
+        // Show More / Show Less
+        // --------------------------
+
+        const showBtn =
+            document.getElementById("show-more-btn");
+
+        let expanded = false;
+
+        showBtn.addEventListener("click", function () {
+
+            expanded = !expanded;
+
+            ingredientCards.forEach((card, index) => {
+
+                if (index >= 15) {
+
+                    card.style.display = expanded
+                        ? "block"
+                        : "none";
 
                 }
 
             });
+
+            this.innerHTML = expanded
+                ? "Show Less ▲"
+                : "Show More ▼";
+
+        });
+
+
+        // --------------------------
+        // Hide Search Results
+        // --------------------------
+
+        document.addEventListener("click", function (e) {
+
+            if (!searchBox.contains(e.target) &&
+                !results.contains(e.target)) {
+
+                results.classList.add("hidden");
+
+            }
+
+        });
+
     </script>
+
 </body>
 
 </html>
