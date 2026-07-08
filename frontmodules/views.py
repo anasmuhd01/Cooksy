@@ -65,7 +65,7 @@ class IngredientListView(View):
             f"{reverse('ilist')}?ingredients={','.join(splitted_data)}"
         )
 
-    
+
 
 def live_search(req):
 
@@ -85,10 +85,7 @@ def live_search(req):
     return JsonResponse(data,safe=False)
 
 
-class ViewRecipies(View):
 
-    def get(self,req):
-        return render(req,'viewrecipies.html')
     
 class BuyRecipieView(View):
     
@@ -117,6 +114,15 @@ the all ingredient id of the recipie are in this i.ingredient.id so using req.se
         req.session['all_ingredients'] = all_ingredients_id
        
         return render(req,'buyrecipie.html',{'ingredients':ingredients,'user_selected':user_selected_ingredients,'recipie_name':recipie_name})
+
+
+#all recipies view --------
+class ViewallRecipies(View):
+    def get(self,req):
+        all_recipies = ReciepieItem.objects.all()
+        return render(req,'allrecipies.html')
+
+
 
 @method_decorator(never_cache,name='dispatch')   
 class BuyallFormView(View):
