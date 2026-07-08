@@ -3,232 +3,327 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Recipes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title>Find Recipies</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+
 </head>
 
-<body class="bg-gray-50">
 
-    <div class="max-w-7xl mx-auto px-6 py-10">
 
-        <!-- Heading -->
 
-        <div class="text-center mb-10">
+<body class="bg-slate-50 text-gray-800">
 
-            <h1 class="text-5xl font-black text-gray-800">
-                Find Your Ingredients
-            </h1>
+    <!-- Background Decorations -->
 
-            <p class="text-gray-500 mt-3">
-                Select the ingredients you have and discover recipes you can cook.
-            </p>
+    <div class="fixed inset-0 -z-10 overflow-hidden">
 
+        <div class="absolute w-96 h-96 bg-green-200 rounded-full blur-3xl opacity-30 -top-20 -left-24"></div>
+
+        <div class="absolute w-[450px] h-[450px] bg-orange-200 rounded-full blur-3xl opacity-20 top-72 right-0">
         </div>
 
-        <!-- Search -->
+    </div>
 
-        <div class="relative max-w-2xl mx-auto mb-10">
+    <!-- NAVBAR -->
 
-            <input type="text" id="search-box" placeholder="Search ingredients..."
-                class="w-full border rounded-xl px-5 py-4 focus:ring-2 focus:ring-green-500 outline-none">
+    <nav class="sticky top-5 z-50">
 
-            <div id="results"
-                class="hidden absolute left-0 right-0 mt-2 bg-white shadow-lg rounded-xl p-3 flex flex-wrap gap-2 z-50">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="bg-white/80 backdrop-blur-xl border border-gray-200 rounded-full shadow-xl">
+
+                <div class="flex items-center justify-between px-8 py-4">
+
+                    <!-- Logo -->
+
+                    <a href="{% url 'home' %}" class="flex items-center gap-3">
+
+                        <div
+                            class="w-11 h-11 rounded-full bg-green-600 text-white flex items-center justify-center text-lg">
+
+                            🍴
+
+                        </div>
+
+                        <div>
+
+                            <h1 class="font-black text-2xl text-green-700">
+
+                                COOKSY
+
+                            </h1>
+
+                        </div>
+
+                    </a>
+
+                    <!-- Desktop Menu -->
+
+                    <div class="hidden lg:flex items-center gap-10">
+
+                        <a href="{% url 'home' %}" class="font-medium hover:text-green-600 transition">
+
+                            Home
+
+                        </a>
+
+                        <a href="{% url 'viewallrec' %}" class="font-medium hover:text-green-600 transition">
+
+                            Recipes
+
+                        </a>
+
+                        <a href="#how" class="font-medium hover:text-green-600 transition">
+
+                            How It Works
+
+                        </a>
+
+
+
+                    </div>
+
+                    <!-- Button -->
+
+                    <a href="{% url 'ilist' %}"
+                        class="hidden lg:inline-flex bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold transition">
+
+                        Start Cooking
+
+                    </a>
+
+                </div>
 
             </div>
 
         </div>
 
-        <!-- Selected Ingredients -->
+    </nav>
 
-        <div class="bg-white rounded-2xl shadow p-6 mb-8 max-w-3xl mx-auto">
+    <body class="bg-gray-50">
 
-            <div class="flex justify-between items-center mb-4">
+        <div class="max-w-7xl mx-auto px-6 py-10">
 
-                <h2 class="text-xl font-bold">
+            <!-- Heading -->
 
-                    Selected Ingredients
+            <div class="text-center mb-10">
 
-                </h2>
+                <h1 class="text-5xl font-black text-gray-800">
+                    Find Your Ingredients
+                </h1>
 
-                <span id="selected-count"
-                    class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
-
-                    0 Selected
-
-                </span>
-
-            </div>
-
-            <div id="selected" class="flex flex-wrap gap-3 min-h-[40px] mb-4">
+                <p class="text-gray-500 mt-3">
+                    Select the ingredients you have and discover recipes you can cook.
+                </p>
 
             </div>
 
-            <!-- Error Message -->
+            <!-- Search -->
 
-            <p id="message" class="hidden text-red-600 font-medium mb-4">
+            <div class="relative max-w-2xl mx-auto mb-10">
 
-            </p>
+                <input type="text" id="search-box" placeholder="Search ingredients..."
+                    class="w-full border rounded-xl px-5 py-4 focus:ring-2 focus:ring-green-500 outline-none">
 
-            <form id="recipie-form" method="POST" action="{% url 'ilist' %}">
+                <div id="results"
+                    class="hidden absolute left-0 right-0 mt-2 bg-white shadow-lg rounded-xl p-3 flex flex-wrap gap-2 z-50">
 
-                {% csrf_token %}
+                </div>
 
-                <input type="hidden" id="selected-ingredients" name="selected-ingredients">
+            </div>
 
-                <button class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold">
+            <!-- Selected Ingredients -->
 
-                    🍴 Find Recipes
+            <div class="bg-white rounded-2xl shadow p-6 mb-8 max-w-3xl mx-auto">
 
-                </button>
+                <div class="flex justify-between items-center mb-4">
 
-            </form>
+                    <h2 class="text-xl font-bold">
 
-        </div>
+                        Selected Ingredients
 
-        <!-- Ingredients -->
+                    </h2>
 
-        <div class="flex justify-between items-center mb-6">
+                    <span id="selected-count"
+                        class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
 
-            <h2 class="text-3xl font-bold">
+                        0 Selected
 
-                Ingredients
+                    </span>
 
-            </h2>
+                </div>
 
-            <button id="show-more-btn" class="text-green-600 font-semibold">
+                <div id="selected" class="flex flex-wrap gap-3 min-h-[40px] mb-4">
 
-                Show More ↓
+                </div>
 
-            </button>
+                <!-- Error Message -->
 
-        </div>
-
-        <div id="ingredients-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-
-            {% for i in ingredients %}
-
-            <button
-                class="ingredient-card bg-white border rounded-xl p-5 hover:border-green-600 hover:shadow-md transition"
-                data-id="{{i.id}}" data-name="{{i.ingredient_name}}" {% if forloop.counter > 15 %}
-                style="display:none;"
-                {% endif %}>
-
-                {% if i.image %}
-
-                <img src="{{i.image.url}}" class="w-16 h-16 object-contain mx-auto mb-3">
-
-                {% endif %}
-
-                <p class="font-semibold">
-
-                    {{i.ingredient_name}}
+                <p id="message" class="hidden text-red-600 font-medium mb-4">
 
                 </p>
 
-            </button>
+                <form id="recipie-form" method="POST" action="{% url 'ilist' %}">
 
-            {% endfor %}
+                    {% csrf_token %}
 
-        </div>
+                    <input type="hidden" id="selected-ingredients" name="selected-ingredients">
 
-    </div>
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold">
 
-    {% if recipies %}
+                        🍴 Find Recipes
 
-    <div class="max-w-7xl mx-auto px-6 pb-12">
+                    </button>
 
-        <h2 class="text-4xl font-black mb-8">
-            Matching Recipes
-        </h2>
+                </form>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {% for i in recipies %}
-
-            <div class="bg-white rounded-2xl shadow p-6 h-[450px] flex flex-col">
-            
-                <h3 class="text-2xl font-bold mb-4">
-                    {{ i.recipie_name }}
-                </h3>
-            
-                <img src="{{ i.recipie_img_url }}" alt="{{ i.recipie_name }}" class="w-full h-56 object-cover rounded-lg">
-            
-                <a href="{% url 'buyrecipie' i.id %}"
-                    class="mt-auto inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg text-center">
-                    View Recipe
-                </a>
-            
             </div>
 
-            {% endfor %}
+            <!-- Ingredients -->
+
+            <div class="flex justify-between items-center mb-6">
+
+                <h2 class="text-3xl font-bold">
+
+                    Ingredients
+
+                </h2>
+
+                <button id="show-more-btn" class="text-green-600 font-semibold">
+
+                    Show More ↓
+
+                </button>
+
+            </div>
+
+            <div id="ingredients-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+
+                {% for i in ingredients %}
+
+                <button
+                    class="ingredient-card bg-white border rounded-xl p-5 hover:border-green-600 hover:shadow-md transition"
+                    data-id="{{i.id}}" data-name="{{i.ingredient_name}}" {% if forloop.counter > 15 %}
+                    style="display:none;"
+                    {% endif %}>
+
+                    {% if i.image %}
+
+                    <img src="{{i.image.url}}" class="w-16 h-16 object-contain mx-auto mb-3">
+
+                    {% endif %}
+
+                    <p class="font-semibold">
+
+                        {{i.ingredient_name}}
+
+                    </p>
+
+                </button>
+
+                {% endfor %}
+
+            </div>
 
         </div>
 
-    </div>
+        {% if recipies %}
 
-    {% elif user_input %}
+        <div class="max-w-7xl mx-auto px-6 pb-12">
 
-    <div class="max-w-3xl mx-auto mt-12">
-
-        <div class="bg-yellow-50 border border-yellow-300 rounded-xl p-8 text-center">
-
-            <h2 class="text-2xl font-bold text-yellow-700">
-
-                😔 No Recipes Found
-
+            <h2 class="text-4xl font-black mb-8">
+                Matching Recipes
             </h2>
 
-            <p class="text-gray-600 mt-2">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                Try selecting different ingredients.
+                {% for i in recipies %}
 
-            </p>
+                <div class="bg-white rounded-2xl shadow p-6 h-[450px] flex flex-col">
+
+                    <h3 class="text-2xl font-bold mb-4">
+                        {{ i.recipie_name }}
+                    </h3>
+
+                    <img src="{{ i.recipie_img_url }}" alt="{{ i.recipie_name }}"
+                        class="w-full h-56 object-cover rounded-lg">
+
+                    <a href="{% url 'buyrecipie' i.id %}"
+                        class="mt-auto inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg text-center">
+                        View Recipe
+                    </a>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
 
         </div>
 
-    </div>
+        {% elif user_input %}
 
-    {% endif %}
+        <div class="max-w-3xl mx-auto mt-12">
+
+            <div class="bg-yellow-50 border border-yellow-300 rounded-xl p-8 text-center">
+
+                <h2 class="text-2xl font-bold text-yellow-700">
+
+                    😔 No Recipes Found
+
+                </h2>
+
+                <p class="text-gray-600 mt-2">
+
+                    Try selecting different ingredients.
+
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
 
 
-    <script>
+        <script>
 
-        // --------------------------
-        // Search Ingredients
-        // --------------------------
+            // --------------------------
+            // Search Ingredients
+            // --------------------------
 
-        const searchBox = document.getElementById("search-box");
-        const results = document.getElementById("results");
+            const searchBox = document.getElementById("search-box");
+            const results = document.getElementById("results");
 
-        searchBox.addEventListener("keyup", function () {
+            searchBox.addEventListener("keyup", function () {
 
-            let query = this.value.trim();
+                let query = this.value.trim();
 
-            if (query === "") {
-                results.innerHTML = "";
-                results.classList.add("hidden");
-                return;
-            }
-
-            fetch(`/search/?q=${query}`)
-                .then(response => response.json())
-                .then(data => {
-
+                if (query === "") {
                     results.innerHTML = "";
+                    results.classList.add("hidden");
+                    return;
+                }
 
-                    if (data.length === 0) {
-                        results.classList.add("hidden");
-                        return;
-                    }
+                fetch(`/search/?q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
 
-                    results.classList.remove("hidden");
+                        results.innerHTML = "";
 
-                    data.forEach(item => {
+                        if (data.length === 0) {
+                            results.classList.add("hidden");
+                            return;
+                        }
 
-                        results.innerHTML += `
+                        results.classList.remove("hidden");
+
+                        data.forEach(item => {
+
+                            results.innerHTML += `
                         <button
                             class="px-3 py-2 rounded-full bg-gray-100 hover:bg-green-600 hover:text-white transition"
                             onclick="selectIngredient(${item.id}, '${item.ingredient_name}')">
@@ -238,38 +333,38 @@
                         </button>
                     `;
 
+                        });
+
                     });
 
-                });
-
-        });
+            });
 
 
-        // --------------------------
-        // Selected Ingredients
-        // --------------------------
+            // --------------------------
+            // Selected Ingredients
+            // --------------------------
 
-        let selectedIngredients = [];
+            let selectedIngredients = [];
 
-        const selected = document.getElementById("selected");
-        const counter = document.getElementById("selected-count");
-        const message = document.getElementById("message");
+            const selected = document.getElementById("selected");
+            const counter = document.getElementById("selected-count");
+            const message = document.getElementById("message");
 
-        function updateCounter() {
+            function updateCounter() {
 
-            counter.innerHTML = `${selectedIngredients.length} Selected`;
+                counter.innerHTML = `${selectedIngredients.length} Selected`;
 
-        }
+            }
 
-        function selectIngredient(id, name) {
-            message.classList.add("hidden");
+            function selectIngredient(id, name) {
+                message.classList.add("hidden");
 
-            if (selectedIngredients.includes(id))
-                return;
+                if (selectedIngredients.includes(id))
+                    return;
 
-            selectedIngredients.push(id);
+                selectedIngredients.push(id);
 
-            selected.innerHTML += `
+                selected.innerHTML += `
 
             <span
                 id="ingredient-${id}"
@@ -287,145 +382,145 @@
 
         `;
 
-            updateCounter();
+                updateCounter();
 
-            let card = document.querySelector(`[data-id="${id}"]`);
+                let card = document.querySelector(`[data-id="${id}"]`);
 
-            if (card) {
+                if (card) {
 
-                card.classList.add(
-                    "border-green-600",
-                    "bg-green-50"
-                );
+                    card.classList.add(
+                        "border-green-600",
+                        "bg-green-50"
+                    );
 
-            }
-
-        }
-
-        function removeIngredient(id) {
-
-            selectedIngredients =
-                selectedIngredients.filter(item => item !== id);
-
-            document.getElementById(`ingredient-${id}`)?.remove();
-
-            updateCounter();
-
-            let card = document.querySelector(`[data-id="${id}"]`);
-
-            if (card) {
-
-                card.classList.remove(
-                    "border-green-600",
-                    "bg-green-50"
-                );
+                }
 
             }
 
-        }
+            function removeIngredient(id) {
+
+                selectedIngredients =
+                    selectedIngredients.filter(item => item !== id);
+
+                document.getElementById(`ingredient-${id}`)?.remove();
+
+                updateCounter();
+
+                let card = document.querySelector(`[data-id="${id}"]`);
+
+                if (card) {
+
+                    card.classList.remove(
+                        "border-green-600",
+                        "bg-green-50"
+                    );
+
+                }
+
+            }
 
 
-        // --------------------------
-        // Ingredient Cards
-        // --------------------------
+            // --------------------------
+            // Ingredient Cards
+            // --------------------------
 
-        const ingredientCards =
-            document.querySelectorAll(".ingredient-card");
+            const ingredientCards =
+                document.querySelectorAll(".ingredient-card");
 
-        ingredientCards.forEach(card => {
+            ingredientCards.forEach(card => {
 
-            card.addEventListener("click", function () {
+                card.addEventListener("click", function () {
 
-                let id = Number(this.dataset.id);
-                let name = this.dataset.name;
+                    let id = Number(this.dataset.id);
+                    let name = this.dataset.name;
 
-                selectIngredient(id, name);
+                    selectIngredient(id, name);
+
+                });
 
             });
 
-        });
 
-
-        // --------------------------
-        // Form Submit
-        // --------------------------
+            // --------------------------
+            // Form Submit
+            // --------------------------
 
 
 
-        const form = document.getElementById("recipie-form");
+            const form = document.getElementById("recipie-form");
 
-        form.addEventListener("submit", function (e) {
+            form.addEventListener("submit", function (e) {
 
-            if (selectedIngredients.length === 0) {
+                if (selectedIngredients.length === 0) {
 
-                e.preventDefault();
+                    e.preventDefault();
 
-                message.innerHTML = "⚠ Please select at least one ingredient.";
+                    message.innerHTML = "⚠ Please select at least one ingredient.";
 
-                message.classList.remove("hidden");
+                    message.classList.remove("hidden");
 
-                return;
-            }
+                    return;
+                }
 
-            message.classList.add("hidden");
+                message.classList.add("hidden");
 
-            document.getElementById("selected-ingredients").value =
-                selectedIngredients.join(",");
+                document.getElementById("selected-ingredients").value =
+                    selectedIngredients.join(",");
 
-        });
+            });
 
 
 
 
-        // --------------------------
-        // Show More / Show Less
-        // --------------------------
+            // --------------------------
+            // Show More / Show Less
+            // --------------------------
 
-        const showBtn =
-            document.getElementById("show-more-btn");
+            const showBtn =
+                document.getElementById("show-more-btn");
 
-        let expanded = false;
+            let expanded = false;
 
-        showBtn.addEventListener("click", function () {
+            showBtn.addEventListener("click", function () {
 
-            expanded = !expanded;
+                expanded = !expanded;
 
-            ingredientCards.forEach((card, index) => {
+                ingredientCards.forEach((card, index) => {
 
-                if (index >= 15) {
+                    if (index >= 15) {
 
-                    card.style.display = expanded
-                        ? "block"
-                        : "none";
+                        card.style.display = expanded
+                            ? "block"
+                            : "none";
+
+                    }
+
+                });
+
+                this.innerHTML = expanded
+                    ? "Show Less ▲"
+                    : "Show More ▼";
+
+            });
+
+
+            // --------------------------
+            // Hide Search Results
+            // --------------------------
+
+            document.addEventListener("click", function (e) {
+
+                if (!searchBox.contains(e.target) &&
+                    !results.contains(e.target)) {
+
+                    results.classList.add("hidden");
 
                 }
 
             });
 
-            this.innerHTML = expanded
-                ? "Show Less ▲"
-                : "Show More ▼";
+        </script>
 
-        });
-
-
-        // --------------------------
-        // Hide Search Results
-        // --------------------------
-
-        document.addEventListener("click", function (e) {
-
-            if (!searchBox.contains(e.target) &&
-                !results.contains(e.target)) {
-
-                results.classList.add("hidden");
-
-            }
-
-        });
-
-    </script>
-
-</body>
+    </body>
 
 </html>
