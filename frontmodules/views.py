@@ -99,11 +99,26 @@ class BuyRecipieView(View):
 
         #takes the first item of the model with first then use what item
         first_item = ingredients.first()
-        recipie_name = first_item.recipie if first_item else None
+        recipie = first_item.recipie if first_item else None
         # print(ingredients)
         
         """
 the all ingredient id of the recipie are in this i.ingredient.id so using req.session this can be passed and used
+        """
+
+        """
+Extract only the IDs of all ingredients used in the current recipe.
+
+    - 'ingredients' is a QuerySet of ReciepieItem objects.
+    - Each ReciepieItem has a ForeignKey to an Ingredient.
+    - values_list('ingredient_id', flat=True) retrieves only the
+    ingredient IDs instead of the full Ingredient objects.
+    - flat=True returns a simple list-like sequence of IDs
+    (e.g. [1, 2, 3]) instead of tuples (e.g. [(1,), (2,), (3,)]).
+    - Wrapping it with list() converts the QuerySet into a normal
+    Python list, which can be stored in the session and used later
+    for comparison, filtering, or purchasing all ingredients.
+
         """
         print(req.session.get("user selected:",selected))
         print("all ingredients ids")
@@ -113,14 +128,14 @@ the all ingredient id of the recipie are in this i.ingredient.id so using req.se
         )
         req.session['all_ingredients'] = all_ingredients_id
        
-        return render(req,'buyrecipie.html',{'ingredients':ingredients,'user_selected':user_selected_ingredients,'recipie_name':recipie_name})
+        return render(req,'buyrecipie.html',{'ingredients':ingredients,'user_selected':user_selected_ingredients,'recipie':recipie})
 
 
 #all recipies view --------
 class ViewallRecipies(View):
     def get(self,req):
-        all_recipies = ReciepieItem.objects.all()
-        return render(req,'allrecipies.html')
+        all_recipies = Recipie.objects.all()
+        return render(req,'allrecipies.html',{'allrecipies':all_recipies})
 
 
 
@@ -222,9 +237,14 @@ class PaymentVerifyView(View):
             order = Order.objects.get(razr_pay_id=razr_pay_id)
             order.is_paid = True
             order.save()
+            messages.success(req,"Order Placed Succefully")
         except:
             print('Failed')
+            messages.error(req,"Payment Verification failed")
+            return redirect('home')
 
+
+        
         return redirect('home')
         
     

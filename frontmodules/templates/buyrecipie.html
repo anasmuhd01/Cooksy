@@ -3,76 +3,248 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Tailwind -->
+    <title>COOKSY</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <title>{{recipie_name}}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body class="bg-orange-50">
 
-    <div class="max-w-7xl mx-auto py-10 px-5">
 
-        <!-- Hero -->
-        <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl shadow-xl p-10 text-white">
+<body class="bg-slate-50 text-gray-800">
 
-            <h1 class="text-5xl font-bold mb-4">
-                🍗 {{recipie_name}}
-            </h1>
+    <!-- Background Decorations -->
 
-            <p class="text-lg leading-8 opacity-90">
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+
+        <div class="absolute w-96 h-96 bg-green-200 rounded-full blur-3xl opacity-30 -top-20 -left-24"></div>
+
+        <div class="absolute w-[450px] h-[450px] bg-orange-200 rounded-full blur-3xl opacity-20 top-72 right-0">
+        </div>
+
+    </div>
+
+    <!-- NAVBAR -->
+    <!-- fixed top-5 left-0 right-0 z-50 -->
+    <nav class="sticky top-5 z-50">
+
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="bg-white/80 backdrop-blur-xl border border-gray-200 rounded-full shadow-xl">
+
+                <div class="flex items-center justify-between px-8 py-4">
+
+                    <!-- Logo -->
+
+                    <a href="{% url 'home' %}" class="flex items-center gap-3">
+
+                        <div
+                            class="w-11 h-11 rounded-full bg-green-600 text-white flex items-center justify-center text-lg">
+
+                            🍴
+
+                        </div>
+
+                        <div>
+
+                            <h1 class="font-black text-2xl text-green-700">
+
+                                COOKSY
+
+                            </h1>
+
+                        </div>
+
+                    </a>
+
+                    <!-- Desktop Menu -->
+
+                    <div class="hidden lg:flex items-center gap-10">
+
+                        <a href="{% url 'home' %}" class="font-medium hover:text-green-600 transition">
+
+                            Home
+
+                        </a>
+
+                        <a href="#recipes" class="font-medium hover:text-green-600 transition">
+
+                            Recipes
+
+                        </a>
+
+                        <a href="{% url 'home' %}" class="font-medium hover:text-green-600 transition">
+
+                            How It Works
+
+                        </a>
+
+
+
+                    </div>
+
+                    <!-- Button -->
+
+                    <a href="{% url 'ilist' %}"
+                        class="hidden lg:inline-flex bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold transition">
+
+                        Start Cooking
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+<body class="bg-slate-100 text-slate-800">
+
+    <div class="max-w-7xl mx-auto px-6 py-10">
+
+        <!-- ================= HERO ================= -->
+
+        <div
+            class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 p-10 shadow-xl">
+
+            <!-- Heading -->
+
+            <div>
+
+                <p class="uppercase tracking-[5px] text-indigo-300 text-sm font-semibold">
+                    Recipe
+                </p>
+
+                <h1 class="text-5xl font-black text-white mt-2">
+                    {{recipie.recipie_name}}
+                </h1>
+
+            </div>
+
+            <!-- Description -->
+
+            <!-- <p class="text-slate-300 leading-8 mt-6 max-w-4xl">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Quibusdam quasi dolore magnam. Corrupti repudiandae fugiat
                 quod corporis, hic, odio harum minus in temporibus iste
                 accusantium veritatis tenetur.
-            </p>
+            </p> -->
+
+            <!-- Recipe Image -->
+
+            <div class="mt-8">
+
+                <img src="{{recipie.recipie_img_url}}" alt="Recipe Image"
+                    class="w-full h-80 object-cover rounded-3xl shadow-lg border border-white/10">
+
+            </div>
+
+            <!-- Stats -->
+
+            <div class="grid grid-cols-3 gap-5 mt-8">
+
+                <div class="bg-white/10 rounded-2xl backdrop-blur p-5">
+
+                    <p class="text-slate-300 text-sm">
+                        Ingredients
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-white">
+                        {{ingredients|length}}
+                    </h3>
+
+                </div>
+
+                <div class="bg-white/10 rounded-2xl backdrop-blur p-5">
+
+                    <p class="text-slate-300 text-sm">
+                        Selected
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-white">
+                        {{user_selected|length}}
+                    </h3>
+
+                </div>
+
+                <div class="bg-white/10 rounded-2xl backdrop-blur p-5">
+
+                    <p class="text-slate-300 text-sm">
+                        Ready
+                    </p>
+
+                    <h3 class="text-3xl">
+                        🍽️
+                    </h3>
+
+                </div>
+
+            </div>
 
         </div>
 
+        <!-- ================= HOW TO MAKE ================= -->
 
-        <!-- How To Make -->
-        <div class="mt-10 bg-white rounded-2xl shadow-lg p-8">
+        <div class="mt-10 bg-white border border-slate-200 rounded-3xl p-10 shadow-sm">
 
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">
-                👨‍🍳 How To Make
+            <h2 class="text-3xl font-bold flex items-center gap-3">
+
+                <span class="text-indigo-600 text-4xl">
+                    👨‍🍳
+                </span>
+
+                How To Make
+
             </h2>
 
-            <p class="text-gray-600 leading-8">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Soluta odio ullam ab tenetur est optio numquam exercitationem
-                voluptatibus nam voluptate, sunt et, reiciendis, molestias
-                aliquid eaque pariatur placeat deserunt animi.
+            <p class="text-slate-600 leading-8 mt-6">
+                {{recipie.description}}
             </p>
 
         </div>
 
+        <!-- ================= INGREDIENTS ================= -->
 
-        <!-- Ingredients Section -->
         <div class="grid lg:grid-cols-2 gap-8 mt-10">
 
             <!-- All Ingredients -->
-            <div class="bg-white rounded-2xl shadow-lg p-6">
 
-                <div class="flex justify-between items-center mb-6">
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
 
-                    <h2 class="text-2xl font-bold">
-                        🛒 Ingredients
-                    </h2>
+                <div class="flex justify-between items-center mb-8">
+
+                    <div class="flex items-center gap-3">
+
+                        <div class="w-11 h-11 rounded-xl bg-indigo-100 flex items-center justify-center text-xl">
+                            🛒
+                        </div>
+
+                        <h2 class="text-2xl font-bold">
+                            Ingredients
+                        </h2>
+
+                    </div>
 
                     <a href="{% url 'buy-all' %}"
-                        class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg transition">
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition duration-300">
+
                         Buy All
+
                     </a>
 
                 </div>
 
                 {% for item in ingredients %}
 
-                <div class="border rounded-xl p-4 mb-4 hover:shadow-md transition">
+                <div
+                    class="border border-slate-200 rounded-2xl p-5 mb-4 hover:border-indigo-300 hover:shadow-md transition duration-300">
 
-                    <div class="flex justify-between">
+                    <div class="flex justify-between items-center">
 
                         <div>
 
@@ -80,15 +252,15 @@
                                 {{item.ingredient}}
                             </h3>
 
-                            <p class="text-gray-500">
+                            <p class="text-slate-500">
                                 {{item.quantity}} g
                             </p>
 
                         </div>
 
-                        <div class="text-right">
+                        <div>
 
-                            <span class="font-bold text-orange-600">
+                            <span class="font-bold text-xl text-indigo-600">
                                 ₹{{item.ingredient.price}}
                             </span>
 
@@ -102,19 +274,26 @@
 
             </div>
 
-
-
             <!-- Selected Ingredients -->
-            <div class="bg-white rounded-2xl shadow-lg p-6">
 
-                <div class="flex justify-between items-center mb-6">
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
 
-                    <h2 class="text-2xl font-bold">
-                        ✅ Selected Ingredients
-                    </h2>
+                <div class="flex justify-between items-center mb-8">
+
+                    <div class="flex items-center gap-3">
+
+                        <div class="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center text-xl">
+                            ✅
+                        </div>
+
+                        <h2 class="text-2xl font-bold">
+                            Selected Ingredients
+                        </h2>
+
+                    </div>
 
                     <a href="{% url 'buy-selected' %}"
-                        class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition">
+                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition duration-300">
 
                         Buy Selected
 
@@ -126,13 +305,14 @@
 
                 {% for i in user_selected %}
 
-                <div class="flex justify-between items-center border rounded-xl p-4 mb-4">
+                <div
+                    class="flex justify-between items-center border border-slate-200 rounded-2xl p-5 mb-4 hover:border-emerald-300 hover:shadow-md transition">
 
                     <span class="font-semibold">
                         {{i.ingredient_name}}
                     </span>
 
-                    <span class="font-bold text-orange-600">
+                    <span class="font-bold text-xl text-indigo-600">
                         ₹{{i.price}}
                     </span>
 
@@ -142,10 +322,14 @@
 
                 {% else %}
 
-                <div class="text-center py-10">
+                <div class="border-2 border-dashed border-slate-300 rounded-2xl py-14 text-center">
 
-                    <p class="text-gray-500">
-                        No ingredients selected.
+                    <div class="text-5xl mb-4">
+                        🛍️
+                    </div>
+
+                    <p class="text-slate-500 text-lg">
+                        No ingredients selected yet.
                     </p>
 
                 </div>

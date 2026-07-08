@@ -3,112 +3,205 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body class="bg-orange-50 min-h-screen">
-
-    <div class="max-w-6xl mx-auto py-10 px-5">
-
-        <!-- Heading -->
-        <div class="text-center mb-10">
-
-            <h1 class="text-5xl font-bold text-orange-600">
-                🛒 Checkout
-            </h1>
-
-            <p class="text-gray-500 mt-2">
-                Complete your ingredient purchase
-            </p>
-
-        </div>
 
 
-        <div class="grid lg:grid-cols-2 gap-10">
+<body class="bg-slate-50 text-gray-800">
 
-            <!-- Order Summary -->
-            <div class="bg-white rounded-3xl shadow-lg p-8">
+    <!-- Background Decorations -->
 
-                <h2 class="text-2xl font-bold mb-6">
-                    Order Summary
-                </h2>
+    <div class="fixed inset-0 -z-10 overflow-hidden">
 
-                {% for i in all_ingredients %}
+        <div class="absolute w-96 h-96 bg-green-200 rounded-full blur-3xl opacity-30 -top-20 -left-24"></div>
 
-                <div class="flex justify-between items-center border-b py-4">
-
-                    <div>
-
-                        <h3 class="font-semibold text-lg">
-                            {{i}}
-                        </h3>
-
-                    </div>
-
-                    <span class="font-bold text-orange-600">
-                        ₹{{i.price}}
-                    </span>
-
-                </div>
-
-                {% endfor %}
-
-                <div class="mt-6 flex justify-between text-xl font-bold">
-
-                    <span>Total</span>
-
-                    <span class="text-orange-600">
-                        ₹{{total_price}}
-                    </span>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- Customer Details -->
-            <div class="bg-white rounded-3xl shadow-lg p-8">
-
-                <h2 class="text-2xl font-bold mb-6">
-                    Customer Information
-                </h2>
-
-                <form method="POST" action="{% url 'buy-all' %}" class="space-y-5">
-
-                    {% csrf_token %}
-
-                    <input type="text" name="name" placeholder="Full Name" required
-                        class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400 outline-none">
-
-                    <input type="email" name="email" placeholder="Email Address" required
-                        class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400 outline-none">
-
-                    <input type="tel" name="phone" placeholder="Phone Number" required
-                        class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400 outline-none">
-
-                    <textarea name="address" rows="4" placeholder="Delivery Address" required
-                        class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400 outline-none resize-none"></textarea>
-
-                    <button
-                        class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl font-semibold text-lg transition duration-300">
-
-                        Complete Order
-
-                    </button>
-
-                </form>
-
-            </div>
-
+        <div class="absolute w-[450px] h-[450px] bg-orange-200 rounded-full blur-3xl opacity-20 top-72 right-0">
         </div>
 
     </div>
 
-</body>
+    <!-- NAVBAR -->
+    <!-- fixed top-5 left-0 right-0 z-50 -->
+    <nav class="sticky top-5 z-50">
+
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="bg-white/80 backdrop-blur-xl border border-gray-200 rounded-full shadow-xl">
+
+                <div class="flex items-center justify-between px-8 py-4">
+
+                    <!-- Logo -->
+
+                    <a href="{% url 'home' %}" class="flex items-center gap-3">
+
+                        <div
+                            class="w-11 h-11 rounded-full bg-green-600 text-white flex items-center justify-center text-lg">
+
+                            🍴
+
+                        </div>
+
+                        <div>
+
+                            <h1 class="font-black text-2xl text-green-700">
+
+                                COOKSY
+
+                            </h1>
+
+                        </div>
+
+                    </a>
+
+                    <!-- Desktop Menu -->
+
+                    <div class="hidden lg:flex items-center gap-10">
+
+                        <a href="{% url 'home' %}" class="font-medium hover:text-green-600 transition">
+
+                            Home
+
+                        </a>
+
+                        <a href="#recipes" class="font-medium hover:text-green-600 transition">
+
+                            Recipes
+
+                        </a>
+
+                        <a href="{% url 'home' %}" class="font-medium hover:text-green-600 transition">
+
+                            How It Works
+
+                        </a>
+
+
+
+                    </div>
+
+                    <!-- Button -->
+
+                    <a href="{% url 'ilist' %}"
+                        class="hidden lg:inline-flex bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold transition">
+
+                        Start Cooking
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <body class="bg-white dark:bg-gray-300  min-h-screen">
+
+        <div class="max-w-6xl mx-auto py-10 px-5">
+
+            <!-- Heading -->
+            <div class="text-center mb-10">
+
+                <h1 class="text-5xl font-bold text-orange-600">
+                    🛒 Checkout
+                </h1>
+
+                <p class="text-gray-500 mt-2">
+                    Complete your ingredient purchase
+                </p>
+
+            </div>
+
+
+            <div class="grid lg:grid-cols-2 gap-10">
+
+                <!-- Order Summary -->
+                <div class="bg-white rounded-3xl shadow-lg p-8">
+
+                    <h2 class="text-2xl font-bold mb-6">
+                        Order Summary
+                    </h2>
+
+                    {% for i in all_ingredients %}
+
+                    <div class="flex justify-between items-center border-b py-4">
+
+                        <div>
+
+                            <h3 class="font-semibold text-lg">
+                                {{i}}
+                            </h3>
+
+                        </div>
+
+                        <span class="font-bold text-orange-600">
+                            ₹{{i.price}}
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                    <div class="mt-6 flex justify-between text-xl font-bold">
+
+                        <span>Total</span>
+
+                        <span class="text-orange-600">
+                            ₹{{total_price}}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Customer Details -->
+                <div class="bg-white rounded-3xl shadow-lg p-8">
+
+                    <h2 class="text-2xl font-bold mb-6">
+                        Customer Information
+                    </h2>
+
+                    <form method="POST" action="{% url 'buy-all' %}" class="space-y-5">
+
+                        {% csrf_token %}
+
+                        <input type="text" name="name" placeholder="Full Name" required
+                            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400 outline-none">
+
+                        <input type="email" name="email" placeholder="Email Address" required
+                            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400 outline-none">
+
+                        <input type="tel" name="phone" placeholder="Phone Number" required
+                            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400 outline-none">
+
+                        <textarea name="address" rows="4" placeholder="Delivery Address" required
+                            class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400 outline-none resize-none"></textarea>
+
+                        <button
+                            class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl font-semibold text-lg transition duration-300">
+
+                            Complete Order
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </body>
 
 </html>
