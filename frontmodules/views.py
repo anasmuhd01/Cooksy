@@ -9,6 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
+from django.core.mail import send_mail
+from django.conf import settings
+import traceback
 # Create your views here.
 
 
@@ -237,8 +240,46 @@ class PaymentVerifyView(View):
             order = Order.objects.get(razr_pay_id=razr_pay_id)
             order.is_paid = True
             order.save()
+
+            #--------------------- mailing ----------------------------
+            ingredients = "\n".join(f"- {ingredient.ingredient_name}" for ingredient in order.ingredient_object.all())
+
+            message = f"""
+Hi {order.customer_name},
+Thank you for your order!
+
+Your payment has been received successfully.
+
+ORDER DETAILS
+
+
+Order ID: {order.id}
+Order Date: {order.created_at.strftime("%d-%m-%Y %H:%M")}
+Payment Status: Paid
+
+Ingredients Ordered:
+{ingredients}
+
+We'll start preparing your order shortly.
+
+If you have any questions regarding your order, feel free to contact us.
+Thank you for choosing us!
+
+Best Regards,
+COOKSY
+            """
+            send_mail(
+                subject="Order Confirmation",
+                message=message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[order.customer_email],
+                fail_silently=False,
+            )
+
             messages.success(req,"Order Placed Succefully")
-        except:
+        except Exception:
+            # using module import traceback error can be found
+            traceback.print_exc()
             print('Failed')
             messages.error(req,"Payment Verification failed")
             return redirect('home')
