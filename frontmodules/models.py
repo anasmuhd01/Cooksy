@@ -6,6 +6,7 @@ class Recipie(models.Model):
     recipie_name = models.CharField(max_length=100)
     description = models.TextField()
     # recipie_img = models.ImageField(upload_to='recicipie_images',null=True)
+    recipie_img_url = models.TextField(null=True)
 
     # dunder method
     def __str__(self):
@@ -23,7 +24,7 @@ class Ingredient(models.Model):
 class ReciepieItem(models.Model):
     recipie = models.ForeignKey(Recipie,on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient,on_delete=models.CASCADE)
-    quantity = models.CharField(max_length=100)
+    # quantity = models.CharField(max_length=100)
 
     # dunder method
     def __str__(self):
