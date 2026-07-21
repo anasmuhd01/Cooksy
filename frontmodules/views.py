@@ -97,7 +97,7 @@ class BuyRecipieView(View):
         
 
         user_selected_ingredients = Ingredient.objects.filter(id__in = selected)
-       
+        
         ingredients = ReciepieItem.objects.filter(recipie__id = kwargs.get('id'))
 
         #takes the first item of the model with first then use what item
@@ -132,7 +132,8 @@ Extract only the IDs of all ingredients used in the current recipe.
         req.session['all_ingredients'] = all_ingredients_id
        
         return render(req,'buyrecipie.html',{'ingredients':ingredients,'user_selected':user_selected_ingredients,'recipie':recipie})
-
+    
+    
 
 #all recipies view --------
 class ViewallRecipies(View):
